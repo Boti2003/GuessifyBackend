@@ -1,0 +1,107 @@
+{
+  "genreGroups": [
+    {
+      "name": "Alternative",
+      "categories": [
+        {
+          "name": "Modern Alternative",
+          "artists": [
+            {
+              "name": "Elefánt",
+              "deezerId": "7163076"
+            },
+            {
+              "name": "Carson Coma",
+              "deezerId": "51645022"
+            },
+            {
+              "name": "Csaknekedkislány",
+              "deezerId": "10923014"
+            },
+            {
+              "name": "Blahalouisiana",
+              "deezerId": "5367043"
+            }
+          ],
+          "albums": [
+            {
+              "name": "Kill the Koala",
+              "artistName": "Ricsárdgír",
+              "deezerId": "521268842"
+            }
+          ]
+        },
+        {
+          "name": "Classic Alternative Rock",
+          "artists": [
+            {
+              "name": "Kispál és a Borz",
+              "deezerId": "2668"
+            },
+            {
+              "name": "30Y",
+              "deezerId": "4305"
+            },
+            {
+              "name": "Cseh Tamás",
+              "deezerId": "5154876"
+            },
+            {
+              "name": "Kiscsillag",
+              "deezerId": "8110"
+            },
+            {
+              "name": "Quimby",
+              "deezerId": "2177"
+            }
+          ],
+          "albums": []
+        }
+      ]
+    }
+
+  ],
+  "eraGroups": [
+    {
+      "name": "90s",
+      "startYear": 1990,
+      "endYear": 1999,
+      "categories": [
+        {
+          "name": "90s Pop",
+          "artists": [
+            {
+              "name": "Republic",
+              "deezerId": "2412"
+            },
+            {
+              "name": "Emergency House",
+              "deezerId": "65289"
+            },
+            {
+              "name": "Ámokfutók",
+              "deezerId": "454417"
+            },
+            {
+              "name": "Zámbó Jimmy",
+              "deezerId": "64884"
+            }
+          ],
+          "artistsWithMultipleActiveEras": [
+            {
+              "name": "Kispál és a Borz",
+              "deezerId": "2668"
+            }
+          ],
+          "albums": [
+            {
+              "name": "Bomba",
+              "artistName": "TNT",
+              "deezerId": "455003065"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

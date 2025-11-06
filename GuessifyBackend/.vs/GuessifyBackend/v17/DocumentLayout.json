@@ -1,0 +1,615 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\service\\gameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\service\\gameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\entities\\gamedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\entities\\gamedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\entities\\categorygroup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\entities\\categorygroup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\hubs\\gamehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\hubs\\gamehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\entities\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\entities\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\service\\votingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\service\\votingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\service\\gameeventmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\service\\gameeventmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\models\\gameroundeventstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\models\\gameroundeventstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\models\\enum\\eventtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\models\\enum\\eventtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\service\\questionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\service\\questionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\service\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\service\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\hubs\\igameclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\hubs\\igameclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\entities\\dbplayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\entities\\dbplayer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\dto\\gamemodel\\gamedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\dto\\gamemodel\\gamedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\hubs\\lobbyhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\hubs\\lobbyhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\service\\lobbyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\service\\lobbyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\models\\vote.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\models\\vote.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\models\\enum\\gameendreason.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\models\\enum\\gameendreason.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\dto\\gamemodel\\gameenddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\dto\\gamemodel\\gameenddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\entities\\gameround.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\entities\\gameround.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\dto\\lobbymodel\\lobbydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\dto\\lobbymodel\\lobbydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\models\\lobby.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\models\\lobby.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\dto\\gamemodel\\gamerounddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\dto\\gamemodel\\gamerounddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\hubs\\ilobbyclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\hubs\\ilobbyclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\dto\\gamemodel\\categorygroupdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\dto\\gamemodel\\categorygroupdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\service\\deezerapiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\service\\deezerapiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\service\\musicdbsetupservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\service\\musicdbsetupservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\entities\\playeranswer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\entities\\playeranswer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\dto\\gamemodel\\questiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\dto\\gamemodel\\questiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\entities\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\entities\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\entities\\song.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\entities\\song.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\entities\\gamecategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\entities\\gamecategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\migrations\\20251027231554_changeplayeranswerpropertytoboolean.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\migrations\\20251027231554_changeplayeranswerpropertytoboolean.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|c:\\users\\natkay botond\\documents\\bme\\szakdolgozat\\guessifybackend\\guessifybackend\\migrations\\20251027190337_initialmigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC62BA9C-60BF-D413-9F01-D78918395F77}|GuessifyBackend\\GuessifyBackend.csproj|solutionrelative:guessifybackend\\migrations\\20251027190337_initialmigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 34,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Properties\\launchSettings.json",
+              "RelativeToolTip": "GuessifyBackend\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABMAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-04T15:00:49.645Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\appsettings.json",
+              "RelativeDocumentMoniker": "GuessifyBackend\\appsettings.json",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\appsettings.json",
+              "RelativeToolTip": "GuessifyBackend\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-04T15:00:19.811Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Vote.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Models\\Vote.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Models\\Vote.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Models\\Vote.cs",
+              "RelativeToolTip": "GuessifyBackend\\Models\\Vote.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-02T21:40:51.297Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "VotingService.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\VotingService.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Service\\VotingService.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\VotingService.cs",
+              "RelativeToolTip": "GuessifyBackend\\Service\\VotingService.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAkwCwAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-02T19:32:40.628Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "GameEndReason.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Models\\Enum\\GameEndReason.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Models\\Enum\\GameEndReason.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Models\\Enum\\GameEndReason.cs",
+              "RelativeToolTip": "GuessifyBackend\\Models\\Enum\\GameEndReason.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-02T16:34:33.238Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "GameEndDto.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\DTO\\GameModel\\GameEndDto.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\DTO\\GameModel\\GameEndDto.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\DTO\\GameModel\\GameEndDto.cs",
+              "RelativeToolTip": "GuessifyBackend\\DTO\\GameModel\\GameEndDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAQAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-02T16:32:25.649Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "LobbyDto.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\DTO\\LobbyModel\\LobbyDto.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\DTO\\LobbyModel\\LobbyDto.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\DTO\\LobbyModel\\LobbyDto.cs",
+              "RelativeToolTip": "GuessifyBackend\\DTO\\LobbyModel\\LobbyDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-02T10:45:43.118Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "Lobby.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Models\\Lobby.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Models\\Lobby.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Models\\Lobby.cs",
+              "RelativeToolTip": "GuessifyBackend\\Models\\Lobby.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-02T10:42:34.085Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "LobbyService.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\LobbyService.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Service\\LobbyService.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\LobbyService.cs",
+              "RelativeToolTip": "GuessifyBackend\\Service\\LobbyService.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwBQAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T14:49:52.823Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "GameRoundEventState.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Models\\GameRoundEventState.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Models\\GameRoundEventState.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Models\\GameRoundEventState.cs",
+              "RelativeToolTip": "GuessifyBackend\\Models\\GameRoundEventState.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T11:49:43.002Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "EventType.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Models\\Enum\\EventType.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Models\\Enum\\EventType.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Models\\Enum\\EventType.cs",
+              "RelativeToolTip": "GuessifyBackend\\Models\\Enum\\EventType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T11:29:08.762Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "GameEventManager.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\GameEventManager.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Service\\GameEventManager.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\GameEventManager.cs",
+              "RelativeToolTip": "GuessifyBackend\\Service\\GameEventManager.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAswBYAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T11:22:10.922Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "DeezerApiService.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\DeezerApiService.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Service\\DeezerApiService.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\DeezerApiService.cs",
+              "RelativeToolTip": "GuessifyBackend\\Service\\DeezerApiService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T19:11:14.488Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "20251027231554_ChangePlayerAnswerPropertyToBoolean.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Migrations\\20251027231554_ChangePlayerAnswerPropertyToBoolean.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Migrations\\20251027231554_ChangePlayerAnswerPropertyToBoolean.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Migrations\\20251027231554_ChangePlayerAnswerPropertyToBoolean.cs",
+              "RelativeToolTip": "GuessifyBackend\\Migrations\\20251027231554_ChangePlayerAnswerPropertyToBoolean.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T23:15:54.787Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "MusicDbSetupService.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\MusicDbSetupService.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Service\\MusicDbSetupService.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\MusicDbSetupService.cs",
+              "RelativeToolTip": "GuessifyBackend\\Service\\MusicDbSetupService.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAQwBYAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T19:04:28.458Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "20251027190337_InitialMigration.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Migrations\\20251027190337_InitialMigration.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Migrations\\20251027190337_InitialMigration.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Migrations\\20251027190337_InitialMigration.cs",
+              "RelativeToolTip": "GuessifyBackend\\Migrations\\20251027190337_InitialMigration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T19:03:37.321Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "CategoryGroupDto.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\DTO\\GameModel\\CategoryGroupDto.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\DTO\\GameModel\\CategoryGroupDto.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\DTO\\GameModel\\CategoryGroupDto.cs",
+              "RelativeToolTip": "GuessifyBackend\\DTO\\GameModel\\CategoryGroupDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T18:08:22.398Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "Song.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\Song.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Entities\\Song.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\Song.cs",
+              "RelativeToolTip": "GuessifyBackend\\Entities\\Song.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T18:06:41.299Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "GameCategory.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\GameCategory.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Entities\\GameCategory.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\GameCategory.cs",
+              "RelativeToolTip": "GuessifyBackend\\Entities\\GameCategory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-27T17:07:16.556Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "QuestionService.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\QuestionService.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Service\\QuestionService.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\QuestionService.cs",
+              "RelativeToolTip": "GuessifyBackend\\Service\\QuestionService.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAYwBIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T23:02:52.604Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "QuestionDto.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\DTO\\GameModel\\QuestionDto.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\DTO\\GameModel\\QuestionDto.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\DTO\\GameModel\\QuestionDto.cs",
+              "RelativeToolTip": "GuessifyBackend\\DTO\\GameModel\\QuestionDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T22:58:41.684Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "GameRoundDto.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\DTO\\GameModel\\GameRoundDto.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\DTO\\GameModel\\GameRoundDto.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\DTO\\GameModel\\GameRoundDto.cs",
+              "RelativeToolTip": "GuessifyBackend\\DTO\\GameModel\\GameRoundDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T22:23:49.114Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "GameDto.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\DTO\\GameModel\\GameDto.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\DTO\\GameModel\\GameDto.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\DTO\\GameModel\\GameDto.cs",
+              "RelativeToolTip": "GuessifyBackend\\DTO\\GameModel\\GameDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T21:57:28.872Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "IlobbyClient.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Hubs\\IlobbyClient.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Hubs\\IlobbyClient.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Hubs\\IlobbyClient.cs",
+              "RelativeToolTip": "GuessifyBackend\\Hubs\\IlobbyClient.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAADwvxEAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T21:55:48.468Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "LobbyHub.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Hubs\\LobbyHub.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Hubs\\LobbyHub.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Hubs\\LobbyHub.cs",
+              "RelativeToolTip": "GuessifyBackend\\Hubs\\LobbyHub.cs",
+              "ViewState": "AgIAADMAAAAAAAAAAAAhwDIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T21:55:36.295Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IGameClient.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Hubs\\IGameClient.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Hubs\\IGameClient.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Hubs\\IGameClient.cs",
+              "RelativeToolTip": "GuessifyBackend\\Hubs\\IGameClient.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAzwBgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T21:52:32.639Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "GameHub.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Hubs\\GameHub.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Hubs\\GameHub.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Hubs\\GameHub.cs",
+              "RelativeToolTip": "GuessifyBackend\\Hubs\\GameHub.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAEwEAAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T21:52:25.891Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "CategoryService.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\CategoryService.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Service\\CategoryService.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\CategoryService.cs",
+              "RelativeToolTip": "GuessifyBackend\\Service\\CategoryService.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAiwA0AAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T13:45:44.57Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Program.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Program.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Program.cs",
+              "RelativeToolTip": "GuessifyBackend\\Program.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAAAEkAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T13:42:59.426Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "PlayerAnswer.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\PlayerAnswer.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Entities\\PlayerAnswer.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\PlayerAnswer.cs",
+              "RelativeToolTip": "GuessifyBackend\\Entities\\PlayerAnswer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAUAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T13:33:33.902Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "Question.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\Question.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Entities\\Question.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\Question.cs",
+              "RelativeToolTip": "GuessifyBackend\\Entities\\Question.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAuwAoAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T13:33:00.389Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "GameRound.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\GameRound.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Entities\\GameRound.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\GameRound.cs",
+              "RelativeToolTip": "GuessifyBackend\\Entities\\GameRound.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T13:32:18.23Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "DbPlayer.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\DbPlayer.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Entities\\DbPlayer.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\DbPlayer.cs",
+              "RelativeToolTip": "GuessifyBackend\\Entities\\DbPlayer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAtwAsAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T13:30:40.974Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Game.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\Game.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Entities\\Game.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\Game.cs",
+              "RelativeToolTip": "GuessifyBackend\\Entities\\Game.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAA5wBMAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T12:23:13.65Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GameService.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\GameService.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Service\\GameService.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Service\\GameService.cs",
+              "RelativeToolTip": "GuessifyBackend\\Service\\GameService.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAAAgwEAAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T12:35:09.035Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GameDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\GameDbContext.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Entities\\GameDbContext.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\GameDbContext.cs",
+              "RelativeToolTip": "GuessifyBackend\\Entities\\GameDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T12:27:07.54Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CategoryGroup.cs",
+              "DocumentMoniker": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\CategoryGroup.cs",
+              "RelativeDocumentMoniker": "GuessifyBackend\\Entities\\CategoryGroup.cs",
+              "ToolTip": "C:\\Users\\Natkay Botond\\Documents\\BME\\szakdolgozat\\GuessifyBackend\\GuessifyBackend\\Entities\\CategoryGroup.cs",
+              "RelativeToolTip": "GuessifyBackend\\Entities\\CategoryGroup.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAkAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T12:23:14.89Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+@DataModelAndMusicScraping_HostAddress = http://localhost:5070
+
+GET {{DataModelAndMusicScraping_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
