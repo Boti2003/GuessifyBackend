@@ -57,7 +57,7 @@ namespace GuessifyBackend.Service
             return new LobbyDto(lobby.Id, lobby.Name, lobby.Players.Count, lobby.Capacity, lobby.Status, lobby.GameMode, lobby.TotalRoundCount, lobby.ConnectionCode);
         }
 
-        public JoinStatusDto JoinLobbyWithCode(string code, string playerName, string connectionId)
+        public async Task<JoinStatusDto> JoinLobbyWithCode(string code, string playerName, string connectionId)
         {
             var lobby = _lobbies.FirstOrDefault(l => l.ConnectionCode == code);
             if (lobby == null)
@@ -66,6 +66,7 @@ namespace GuessifyBackend.Service
                 return new JoinStatusDto(null, JoinStatus.LOBBY_FULL, null);
             else
             {
+
                 var newPlayer = new Player
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -74,19 +75,20 @@ namespace GuessifyBackend.Service
                     ConnectionId = connectionId
                 };
                 lobby.Players.Add(newPlayer);
-                return new JoinStatusDto(new PlayerDto
-                {
-                    Id = newPlayer.Id,
-                    Name = newPlayer.Name,
-                    Score = newPlayer.Score
-                }, JoinStatus.SUCCESS, lobby.Id);
+
+                var lobbies = this.GetLobbies();
+
+                var players = this.GetPlayersInLobby(lobby.Id);
+                await _lobbyHubContext.Groups.AddToGroupAsync(connectionId, lobby.Id);
+                await _lobbyHubContext.Clients.All.ReceiveLobbies(lobbies);
+                return new JoinStatusDto(new PlayerDto(newPlayer.Id, newPlayer.Name, newPlayer.Score), JoinStatus.SUCCESS, lobby.Id);
             }
 
         }
 
-        public PlayerDto JoinLobbyAsGuest(string lobbyId, string playerName, string connectionId)
+        public async Task<JoinStatusDto> JoinLobby(string lobbyId, string playerName, string connectionId)
         {
-            var lobby = _lobbies.Find(lobby => lobby.Id == lobbyId);
+            var lobby = _lobbies.Single(lobby => lobby.Id == lobbyId);
             Console.WriteLine(lobby);
             var newPlayer = new Player
             {
@@ -96,15 +98,16 @@ namespace GuessifyBackend.Service
                 ConnectionId = connectionId
             };
             if (lobby.Capacity <= lobby.Players.Count)
-                throw new Exception("Lobby is full");
+                return new JoinStatusDto(null, JoinStatus.LOBBY_FULL, null);
             lobby?.Players.Add(newPlayer);
 
-            return new PlayerDto
-            {
-                Id = newPlayer.Id,
-                Name = newPlayer.Name,
-                Score = newPlayer.Score
-            };
+            var lobbies = this.GetLobbies();
+            var players = GetPlayersInLobby(lobbyId);
+
+            await _lobbyHubContext.Groups.AddToGroupAsync(connectionId, lobbyId);
+            await _lobbyHubContext.Clients.All.ReceiveLobbies(lobbies);
+            return new JoinStatusDto(new PlayerDto(newPlayer.Id, newPlayer.Name, newPlayer.Score), JoinStatus.SUCCESS, null);
+
         }
         public List<LobbyDto> GetLobbies()
         {
@@ -148,7 +151,7 @@ namespace GuessifyBackend.Service
                 {
                     l.Players.Remove(player);
                     var lobbiesDto = this.GetLobbies();
-                    var players = await this.GetPlayersInLobby(l.Id);
+                    var players = this.GetPlayersInLobby(l.Id);
                     await _lobbyHubContext.Clients.All.ReceiveLobbies(lobbiesDto);
                     await _lobbyHubContext.Clients.Group(l.Id).ReceivePlayersInLobby(players);
                     return;
@@ -163,20 +166,15 @@ namespace GuessifyBackend.Service
             _lobbies.RemoveAll(p => p.Id == lobbyId);
         }
 
-        public async Task<List<PlayerDto>> GetPlayersInLobby(string lobbyId)
+        public List<PlayerDto> GetPlayersInLobby(string lobbyId)
         {
             var lobby = _lobbies.Find(lobby => lobby.Id == lobbyId);
             if (lobby == null)
-                return null;
+                return new List<PlayerDto>();
             List<PlayerDto> playerDtos = new List<PlayerDto>();
             foreach (var player in lobby.Players)
             {
-                playerDtos.Add(new PlayerDto
-                {
-                    Id = player.Id,
-                    Name = player.Name,
-                    Score = player.Score
-                });
+                playerDtos.Add(new PlayerDto(player.Id, player.Name, player.Score));
             }
             return playerDtos;
         }

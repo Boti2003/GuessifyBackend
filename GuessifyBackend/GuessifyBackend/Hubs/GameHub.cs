@@ -3,6 +3,7 @@ using GuessifyBackend.DTO.LobbyModel;
 using GuessifyBackend.Models.Enum;
 using GuessifyBackend.Service;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace GuessifyBackend.Hubs
 {
@@ -46,12 +47,12 @@ namespace GuessifyBackend.Hubs
             return game;
         }
 
-        public async Task<PlayerDto> JoinGame(string playerName, string gameId)
+        public async Task<PlayerDto> JoinGame(string? playerName, string gameId)
         {
-            var player = await _gameService.AddPlayerToGame(gameId, playerName, Context.ConnectionId);
-            await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
-            var players = await _gameService.GetPlayersInGame(gameId);
-            await Clients.Group(gameId).ReceivePlayersInGame(players);
+            var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var name = userId == null ? playerName! : Context.User?.FindFirst(ClaimTypes.Name)?.Value;
+            var player = await _gameService.AddPlayerToGame(gameId, name!, Context.ConnectionId, userId);
+
             return player;
         }
 

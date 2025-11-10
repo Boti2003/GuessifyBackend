@@ -58,31 +58,27 @@ namespace GuessifyBackend.Service
 
         }
 
-        public async Task<PlayerDto> AddPlayerToGame(string gameId, string playerName, string connectionId)
+        public async Task<PlayerDto> AddPlayerToGame(string gameId, string playerName, string connectionId, string? userId)
         {
-            //TODO: LINQ kövi két sor összevonása - single dobjon hibát - refactor
-            //authorization
-            //ASP.NET Indentity 
-            var games = await _dbContext.Games.Include(g => g.Players).ToListAsync();
-            var game = games.FirstOrDefault(g => g.Id == Guid.Parse(gameId));
+
+            var game = await _dbContext.Games.Include(g => g.Players).Where(g => g.Id == Guid.Parse(gameId)).SingleAsync();
+            var isGuest = string.IsNullOrEmpty(userId);
             var player = new DbPlayer
             {
                 Name = playerName,
                 Score = 0,
                 ConnectionId = connectionId,
+                UserId = userId,
+                IsGuest = isGuest,
+
             };
-            if (game == null)
-            {
-                throw new ArgumentException("Game does not exists");
-            }
+            await _gameHubContext.Groups.AddToGroupAsync(connectionId, gameId);
+            var players = await this.GetPlayersInGame(gameId);
+            await _gameHubContext.Clients.Group(gameId).ReceivePlayersInGame(players);
             game.Players.Add(player);
             await _dbContext.SaveChangesAsync();
-            return new PlayerDto
-            {
-                Id = player.Id.ToString(),
-                Name = player.Name,
-                Score = player.Score,
-            };
+            return new PlayerDto(player.Id.ToString(), player.Name, player.Score);
+
         }
 
         public async Task<List<PlayerDto>> GetPlayersInGame(string gameId)
@@ -98,12 +94,8 @@ namespace GuessifyBackend.Service
             List<PlayerDto> players = new List<PlayerDto>();
             foreach (var player in game.Players)
             {
-                players.Add(new PlayerDto
-                {
-                    Id = player.Id.ToString(),
-                    Name = player.Name,
-                    Score = player.Score,
-                });
+                players.Add(new PlayerDto(player.Id.ToString(), player.Name, player.Score));
+
             }
             return players;
         }

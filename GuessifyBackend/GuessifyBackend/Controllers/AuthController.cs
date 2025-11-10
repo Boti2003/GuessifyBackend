@@ -2,6 +2,7 @@
 using GuessifyBackend.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace GuessifyBackend.Controllers
 {
@@ -17,7 +18,7 @@ namespace GuessifyBackend.Controllers
             _authService = authService;
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         [AllowAnonymous]
         public async Task<IResult> Register([FromBody] RegisterRequestDto request)
         {
@@ -32,7 +33,7 @@ namespace GuessifyBackend.Controllers
             }
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<IResult> Login([FromBody] LoginRequestDto request)
         {
@@ -44,7 +45,7 @@ namespace GuessifyBackend.Controllers
             return Results.Unauthorized();
         }
 
-        [HttpPost("refresh")]
+        [HttpPost("Refresh")]
         [AllowAnonymous]
         public async Task<IResult> Refresh([FromBody] RefreshTokenRequestDto request)
         {
@@ -56,9 +57,32 @@ namespace GuessifyBackend.Controllers
             return Results.Unauthorized();
         }
 
+        [HttpGet("Guest-Token")]
+        [AllowAnonymous]
+        public IResult GetGuestToken()
+        {
+            var token = _authService.GenerateGuestToken();
+            if (token != null)
+            {
+                return Results.Ok(new GuestTokenDto(token));
+            }
+            return Results.StatusCode(500);
+        }
 
+        [HttpGet("Validate-Token")]
+        [Authorize]
+        public IResult ValidateToken()
+        {
+            return Results.Ok();
+        }
 
-
-
+        [HttpPost("Logout")]
+        [Authorize]
+        public async Task<IResult> Logout([FromBody] LogoutRequestDto logoutRequestDto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            await _authService.Logout(logoutRequestDto.RefreshToken);
+            return Results.Ok(new { Message = "User logged out successfully." });
+        }
     }
 }

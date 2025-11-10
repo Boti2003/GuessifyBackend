@@ -43,5 +43,15 @@ namespace GuessifyBackend.Service
             var tokens = await _tokenService.RefreshTokens(refreshToken);
             return tokens;
         }
+
+        public string? GenerateGuestToken()
+        {
+            return _tokenService.GenerateTokenForGuest();
+        }
+
+        public async Task Logout(string refreshToken)
+        {
+            await _tokenService.RevokeRefreshToken(refreshToken);
+        }
     }
 }

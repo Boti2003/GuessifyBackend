@@ -2,6 +2,7 @@
 using GuessifyBackend.Models.Enum;
 using GuessifyBackend.Service;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace GuessifyBackend.Hubs
 {
@@ -38,7 +39,7 @@ namespace GuessifyBackend.Hubs
 
         public async Task RefreshPlayersInLobby(string lobbyId)
         {
-            var players = await _lobbyService.GetPlayersInLobby(lobbyId);
+            var players = _lobbyService.GetPlayersInLobby(lobbyId);
             await Clients.Group(lobbyId).ReceivePlayersInLobby(players);
         }
 
@@ -50,44 +51,39 @@ namespace GuessifyBackend.Hubs
             await Clients.All.ReceiveLobbies(_lobbyService.GetLobbies());
         }
 
-        public async Task<JoinStatusDto> JoinLobbyAsGuestWithCode(string connectionCode, string playerName)
+        public async Task<JoinStatusDto> JoinLobbyAsGuestWithCode(string connectionCode, string? playerName)
         {
-            var joinResult = _lobbyService.JoinLobbyWithCode(connectionCode, playerName, Context.ConnectionId);
-            if (joinResult.JoinStatus == JoinStatus.SUCCESS)
+            var isGuest = Context.User?.FindFirst(ClaimTypes.Anonymous)?.Value != null;
+            string name;
+            if (isGuest)
             {
-                var lobbies = _lobbyService.GetLobbies();
-                if (joinResult.lobbyId != null)
-                {
-                    var players = await _lobbyService.GetPlayersInLobby(joinResult.lobbyId);
-                    await Groups.AddToGroupAsync(Context.ConnectionId, joinResult.lobbyId);
-                    await Clients.All.ReceiveLobbies(lobbies);
-                }
-                return joinResult;
+                name = playerName!;
             }
             else
             {
-                return joinResult;
+                var userName = Context.User?.FindFirst(ClaimTypes.Name)?.Value;
+                name = userName!;
             }
+            var joinStatus = await _lobbyService.JoinLobbyWithCode(connectionCode, name, Context.ConnectionId);
+            return joinStatus;
         }
 
-        public async Task<JoinStatusDto> JoinLobbyAsGuest(string lobbyId, string playerName)
+        public async Task<JoinStatusDto> JoinLobby(string lobbyId, string? playerName)
         {
-            try
+            var isGuest = Context.User?.FindFirst(ClaimTypes.Anonymous)?.Value != null;
+            string name;
+            if (isGuest)
             {
-                var connectionId = Context.ConnectionId;
-                var playerDto = _lobbyService.JoinLobbyAsGuest(lobbyId, playerName, connectionId);
-                var lobbies = _lobbyService.GetLobbies();
-                var players = await _lobbyService.GetPlayersInLobby(lobbyId);
-                await Groups.AddToGroupAsync(connectionId, lobbyId);
-                await Clients.All.ReceiveLobbies(lobbies);
-                return new JoinStatusDto(playerDto, JoinStatus.SUCCESS, null);
-
+                name = playerName!;
             }
-            catch (Exception)
+            else
             {
-                return new JoinStatusDto(null, JoinStatus.LOBBY_FULL, null);
-
+                var userName = Context.User?.FindFirst(ClaimTypes.Name)?.Value;
+                name = userName!;
             }
+            var joinStatusDto = await _lobbyService.JoinLobby(lobbyId, name, Context.ConnectionId);
+            return joinStatusDto;
+
         }
     }
 }

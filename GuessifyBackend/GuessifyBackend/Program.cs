@@ -45,10 +45,10 @@ namespace GuessifyBackend
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 4;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -153,11 +153,7 @@ namespace GuessifyBackend
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.Use(async (context, next) =>
-            {
-                Console.WriteLine("Accept header: " + context.Request.Headers["Accept"]);
-                await next();
-            });
+
 
 
             app.MapControllers();
