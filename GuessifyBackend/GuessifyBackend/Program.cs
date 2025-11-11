@@ -31,6 +31,7 @@ namespace GuessifyBackend
             builder.Services.AddScoped<GameService>();
             builder.Services.AddScoped<QuestionService>();
             builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<UserService>();
             builder.Services.AddSingleton<GameEventManager>();
             builder.Services.AddSingleton<VotingService>();
             //builder.Services.AddControllers();

@@ -2,11 +2,13 @@
 using GuessifyBackend.DTO.LobbyModel;
 using GuessifyBackend.Models.Enum;
 using GuessifyBackend.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 
 namespace GuessifyBackend.Hubs
 {
+    [Authorize]
     public class GameHub : Hub<IGameClient>
     {
         private readonly CategoryService _categoryService;

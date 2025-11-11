@@ -22,11 +22,13 @@ namespace GuessifyBackend.Service
 
         private readonly VotingService _votingService;
 
+        private readonly UserService _userService;
+
         private IHubContext<GameHub, IGameClient> _gameHubContext { get; }
 
         //private List<Game> games = new List<Game>();
 
-        public GameService(GameDbContext dbContext, CategoryService categoryService, QuestionService questionService, DeezerApiService deezerApiService, IHubContext<GameHub, IGameClient> hubContext, GameEventManager gameEventManager, VotingService votingService)
+        public GameService(GameDbContext dbContext, CategoryService categoryService, QuestionService questionService, DeezerApiService deezerApiService, IHubContext<GameHub, IGameClient> hubContext, GameEventManager gameEventManager, VotingService votingService, UserService userService)
         {
             _categoryService = categoryService;
             _dbContext = dbContext;
@@ -35,6 +37,7 @@ namespace GuessifyBackend.Service
             _gameHubContext = hubContext;
             _eventManager = gameEventManager;
             _votingService = votingService;
+            _userService = userService;
         }
 
         public async Task<GameDto> StartNewGame(string name, DateTime startTime, GameMode gameMode, int totalRoundCount, string? hostConnectionId = null)
@@ -192,7 +195,7 @@ namespace GuessifyBackend.Service
                 .Select(a => a.PlayerId).ToList();
             for (int i = 0; i < correctPlayerIds.Count; i++)
             {
-                var points = 50 + (correctPlayerIds.Count - i - 1) * 10;
+                var points = Math.Max(100 - (i * 10), 50);
                 answers.First(a => a.PlayerId == correctPlayerIds[i]).PointsAwarded = points;
                 var player = await _dbContext.Players.FirstOrDefaultAsync(p => p.Id.ToString() == correctPlayerIds[i]);
                 if (player != null) { player.Score += points; }
@@ -319,7 +322,10 @@ namespace GuessifyBackend.Service
             {
                 var game = await _dbContext.Games.Include(g => g.Players)
                     .FirstOrDefaultAsync(g => g.Players.Any(p => p.Id == player.Id));
-
+                if (player.IsGuest == false && player.UserId != null)
+                {
+                    await _userService.CalculateSumScoresForUser(player.UserId);
+                }
                 if (game != null)
                 {
 
@@ -359,9 +365,16 @@ namespace GuessifyBackend.Service
 
         private async Task EndGame(string gameId)
         {
-            var game = await _dbContext.Games.FirstOrDefaultAsync(g => g.Id == Guid.Parse(gameId));
+            var game = await _dbContext.Games.Include(g => g.Players).FirstOrDefaultAsync(g => g.Id == Guid.Parse(gameId));
             if (game == null)
                 throw new ArgumentException("Game is not found");
+            foreach (var player in game.Players)
+            {
+                if (!player.IsGuest && player.UserId != null)
+                {
+                    await _userService.CalculateSumScoresForUser(player.UserId);
+                }
+            }
             game.EndTime = DateTime.Now;
             _votingService.RemoveVoteSummaryForGame(gameId);
             //Unsubscribe from game events

@@ -1,26 +1,42 @@
-﻿using GuessifyBackend.DTO.AuthDto;
+﻿using GuessifyBackend.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace GuessifyBackend.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly UserService _userService;
+        public UserController(UserService userService)
+        {
+            _userService = userService;
+        }
+
         [HttpGet("me")]
         [Authorize]
-        public IResult GetCurrentUser()
+        public async Task<IResult> GetCurrentUser()
         {
-            var email = User.FindFirst(ClaimTypes.Email)?.Value;
-            var name = User.FindFirst(ClaimTypes.Name)?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userService.GetUserProfile(userId!);
 
 
-            if (name == null || email == null)
+            if (user == null)
                 return Results.NotFound();
 
-            return Results.Ok(new UserProfileDto(name, email));
+            return Results.Ok(user);
         }
+
+        [HttpGet("scores")]
+        [Authorize]
+        public async Task<IResult> GetScoresForUsers()
+        {
+            var users = await _userService.GetScoresForUsers();
+            return Results.Ok(users);
+        }
+
     }
 }
