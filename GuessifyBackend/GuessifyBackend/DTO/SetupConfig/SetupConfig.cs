@@ -10,29 +10,29 @@ namespace GuessifyBackend.DTO.SetupConfig
         [JsonPropertyName("eraGroups")]
         public List<EraGroupConfig> EraGroups { get; set; }
     }
-    public class EraGroupConfig
+
+    public class CategoryGroupConfig
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
-        [JsonPropertyName("startYear")]
+
+        [JsonPropertyName("categories")]
+        public List<CategoryConfig> Categories { get; set; }
+    }
+    public class EraGroupConfig : CategoryGroupConfig
+    {
+
         public int StartYear { get; set; }
         [JsonPropertyName("endYear")]
         public int EndYear { get; set; }
 
-        [JsonPropertyName("categories")]
-        public List<EraCategoryConfig> Categories { get; set; }
-    }
-    public class GenreGroupConfig
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
 
-        [JsonPropertyName("categories")]
-        public List<GenreCategoryConfig> Categories { get; set; }
     }
-    public class GenreCategoryConfig
+    public class GenreGroupConfig : CategoryGroupConfig
+    {
+
+    }
+    public class CategoryConfig
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }
@@ -40,21 +40,25 @@ namespace GuessifyBackend.DTO.SetupConfig
         public List<ArtistConfig> Artists { get; set; }
         [JsonPropertyName("albums")]
         public List<AlbumConfig> Albums { get; set; }
+        [JsonPropertyName("excluded_albums")]
+        public List<AlbumConfig> ExcludedAlbums { get; set; }
+
 
     }
 
-    public class EraCategoryConfig
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-        [JsonPropertyName("artists")]
-        public List<ArtistConfig> Artists { get; set; }
-        [JsonPropertyName("artistsWithMultipleActiveEras")]
-        public List<ArtistConfig> ArtistsWithMultipleActiveEras { get; set; }
-        [JsonPropertyName("albums")]
-        public List<AlbumConfig> Albums { get; set; }
+    //public class EraCategoryConfig
+    //{
+    //    [JsonPropertyName("name")]
+    //    public string Name { get; set; }
+    //    [JsonPropertyName("artists")]
+    //    public List<ArtistConfig> Artists { get; set; }
 
-    }
+    //    [JsonPropertyName("albums")]
+    //    public List<AlbumConfig> Albums { get; set; }
+    //    [JsonPropertyName("excluded_albums")]
+    //    public List<AlbumConfig> ExcludedAlbums { get; set; }
+
+    //}
 
     public class ArtistConfig
     {

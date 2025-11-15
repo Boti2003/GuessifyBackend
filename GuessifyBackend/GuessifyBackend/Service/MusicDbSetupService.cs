@@ -16,15 +16,15 @@ namespace GuessifyBackend.Service
 
         public async Task BuildMusicDbStructure(SetupConfig config)
         {
-            /*_dbContext.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Songs', RESEED, 0)");
-            _dbContext.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('GameCategories', RESEED, 0)");
-            _dbContext.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('CategoryGroups', RESEED, 0)");*/
 
             _dbContext.Songs.ExecuteDelete();
             _dbContext.GameCategories.ExecuteDelete();
             _dbContext.CategoryGroups.ExecuteDelete();
 
-            foreach (var gr in config.GenreGroups)
+            List<CategoryGroupConfig> allCategoryGroups = new List<CategoryGroupConfig>();
+            allCategoryGroups.AddRange(config.GenreGroups);
+            allCategoryGroups.AddRange(config.EraGroups);
+            foreach (var gr in allCategoryGroups)
             {
                 var categoryGroup = new CategoryGroup
                 {
@@ -39,16 +39,25 @@ namespace GuessifyBackend.Service
                         TrackList = new List<Song>()
                     };
                     List<Song> songs = new List<Song>();
+                    List<string> excludedAlbumIds = c.ExcludedAlbums.Select(a => a.AlbumDeezerId).ToList();
 
                     foreach (var artist in c.Artists)
                     {
-                        var songsFromThisArtist = await GetSongsFromArtist(artist.ArtistDeezerId, artist.Name, false);
-                        songs.AddRange(songsFromThisArtist);
+                        var songsFromThisArtist = await GetSongsFromArtist(artist.ArtistDeezerId, artist.Name, excludedAlbumIds);
+                        if (songsFromThisArtist != null)
+                        {
+                            songs.AddRange(songsFromThisArtist);
+                        }
+
                     }
 
                     foreach (var album in c.Albums)
                     {
                         var songsFromExtraAlbums = await GetSongsFromAlbum(album.AlbumDeezerId, album.ArtistName);
+                        if (songsFromExtraAlbums == null)
+                        {
+                            continue;
+                        }
                         foreach (var song in songsFromExtraAlbums)
                         {
                             var songsWithThisTitle = songs.Where(s => s.Title.ToLower() == song.Title.ToLower() && s.Artist == song.Artist).ToList();
@@ -73,7 +82,7 @@ namespace GuessifyBackend.Service
                 _dbContext.CategoryGroups.Add(categoryGroup);
 
             }
-            foreach (var gr in config.EraGroups)
+            /*foreach (var gr in config.EraGroups)
             {
                 var categoryGroup = new CategoryGroup
                 {
@@ -88,23 +97,23 @@ namespace GuessifyBackend.Service
                         TrackList = new List<Song>()
                     };
                     List<Song> songs = new List<Song>();
-
+                    List<string> excludedAlbumIds = c.ExcludedAlbums.Select(a => a.AlbumDeezerId).ToList();
                     foreach (var artist in c.Artists)
                     {
-                        var songsFromThisArtist = await GetSongsFromArtist(artist.ArtistDeezerId, artist.Name, false);
-                        songs.AddRange(songsFromThisArtist);
-                    }
-
-                    foreach (var artist in c.ArtistsWithMultipleActiveEras)
-                    {
-                        Console.WriteLine(artist.Name);
-                        var songsFromThisArtist = await GetSongsFromArtist(artist.ArtistDeezerId, artist.Name, true, gr.StartYear, gr.EndYear);
-                        songs.AddRange(songsFromThisArtist);
+                        var songsFromThisArtist = await GetSongsFromArtist(artist.ArtistDeezerId, artist.Name, excludedAlbumIds);
+                        if (songsFromThisArtist != null)
+                        {
+                            songs.AddRange(songsFromThisArtist);
+                        }
                     }
 
                     foreach (var album in c.Albums)
                     {
                         var songsFromExtraAlbums = await GetSongsFromAlbum(album.AlbumDeezerId, album.ArtistName);
+                        if (songsFromExtraAlbums == null)
+                        {
+                            continue;
+                        }
                         foreach (var song in songsFromExtraAlbums)
                         {
                             var songsWithThisTitle = songs.Where(s => s.Title.ToLower() == song.Title.ToLower() && s.Artist == song.Artist).ToList();
@@ -128,12 +137,12 @@ namespace GuessifyBackend.Service
                 }
                 _dbContext.CategoryGroups.Add(categoryGroup);
 
-            }
+            }*/
             _dbContext.SaveChanges();
         }
 
 
-        private async Task<List<Song>> GetSongsFromArtist(string artistId, string artistName, bool era, int startYear = -1, int endYear = -1)
+        private async Task<List<Song>?> GetSongsFromArtist(string artistId, string artistName, List<string> excludedAlbums)
         {
             List<Song> songs = new List<Song>();
             var albumList = await _deezerApiService.GetAlbumsList(artistId);
@@ -147,7 +156,10 @@ namespace GuessifyBackend.Service
             }
             foreach (var album in albumList.MinimalAlbumsList)
             {
-                List<Song> songsFromThisAlbum = null;
+                if (excludedAlbums.Contains(album.Id))
+                    continue;
+
+                List<Song>? songsFromThisAlbum = null;
 
                 songsFromThisAlbum = await GetSongsFromAlbum(album.Id, artistName);
 
@@ -158,12 +170,7 @@ namespace GuessifyBackend.Service
                 foreach (var song in songsFromThisAlbum)
                 {
                     var songsWithThisTitle = songs.Where(s => s.Title.ToLower() == song.Title.ToLower() && s.Artist == artistName).ToList();
-                    if (era && (song.YearOfPublication < startYear || song.YearOfPublication > endYear))
-                    {
-                        Console.WriteLine(song.YearOfPublication);
-                        Console.WriteLine(startYear + " " + endYear);
-                        continue;
-                    }
+
                     if (songsWithThisTitle.Count == 1)
                     {
                         if (songsWithThisTitle[0].YearOfPublication > song.YearOfPublication)
@@ -182,7 +189,7 @@ namespace GuessifyBackend.Service
         }
 
 
-        private async Task<List<Song>> GetSongsFromAlbum(string albumId, string artistName)
+        private async Task<List<Song>?> GetSongsFromAlbum(string albumId, string artistName)
         {
             List<Song> songs = new List<Song>();
             var fullAlbumResponse = await _deezerApiService.GetAlbum(albumId);

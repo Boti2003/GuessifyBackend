@@ -1,29 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace GuessifyBackend.DTO.DeezerResponse
 {
     public class AlbumResponse
     {
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         [JsonPropertyName("title")]
-        public string Title { get; set; }
-
-        [JsonPropertyName("genre_id")]
-        public string GenreId { get; set; }
+        public string Title { get; set; } = null!;
 
         [JsonPropertyName("release_date")]
-        public string ReleaseDate { get; set; }
-
-        [JsonPropertyName("contributors")]
-        public List<ContributorResponse> Contributors { get; set; }
+        public string ReleaseDate { get; set; } = null!;
 
         [JsonPropertyName("tracks")]
-        public TrackResponseList Tracks { get; set; }
+        public TrackResponseList Tracks { get; set; } = null!;
     }
 }

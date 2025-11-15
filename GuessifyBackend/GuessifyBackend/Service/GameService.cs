@@ -221,8 +221,12 @@ namespace GuessifyBackend.Service
             foreach (var question in questions)
             {
                 Console.WriteLine(question.CorrectAnswer);
-                var song = await _dbContext.Songs.FirstOrDefaultAsync(t => t.Id.ToString() == question.SongId);
+                var song = await _dbContext.Songs.SingleAsync(t => t.Id.ToString() == question.SongId);
                 var url = await _deezerApiService.GetPreviewUrlOfTrack(song.DeezerId);
+                if (url == null)
+                {
+                    throw new ArgumentException("Preview URL not found for track");
+                }
                 questionDtos.Add(new QuestionDto(question.Id.ToString(), question.AnswerOptions, url));
             }
             return questionDtos;

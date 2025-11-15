@@ -120,9 +120,9 @@ namespace GuessifyBackend
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            /*var setup = await SetupConfigService.ParseConfigData("setup_game.json");
+            var setup = await SetupConfigService.ParseConfigData("setup_game.json");
             var dbSetupService = new MusicDbSetupService(builder.Services.BuildServiceProvider().GetRequiredService<GameDbContext>(), builder.Services.BuildServiceProvider().GetRequiredService<DeezerApiService>());
-            await dbSetupService.BuildMusicSbStructure(setup);*/
+            await dbSetupService.BuildMusicDbStructure(setup);
 
             builder.Services.AddCors(options =>
             {

@@ -29,6 +29,9 @@
               "artistName": "Ricsárdgír",
               "deezerId": "521268842"
             }
+          ],
+          "excluded_albums": [
+
           ]
         },
         {
@@ -55,7 +58,14 @@
               "deezerId": "2177"
             }
           ],
-          "albums": []
+          "albums": [],
+          "excluded_albums": [
+            {
+              "name": "Hummel, Schubert, Kodály / フンメル • シューベルト • コダーイ",
+              "artistName": "Cseh Tamás",
+              "deezerId": "554914702"
+            }
+          ]
         }
       ]
     }
@@ -87,18 +97,15 @@
               "deezerId": "64884"
             }
           ],
-          "artistsWithMultipleActiveEras": [
-            {
-              "name": "Kispál és a Borz",
-              "deezerId": "2668"
-            }
-          ],
           "albums": [
             {
               "name": "Bomba",
               "artistName": "TNT",
               "deezerId": "455003065"
             }
+          ],
+          "excluded_albums": [
+           
           ]
         }
       ]
