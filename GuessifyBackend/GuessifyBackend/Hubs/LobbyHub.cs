@@ -19,7 +19,14 @@ namespace GuessifyBackend.Hubs
         }
         public async Task<LobbyDto> CreateLobby(string lobbyName, int capacity, GameMode gameMode, int totalRoundCount)
         {
-            var lobby = _lobbyService.CreateLobby(lobbyName, capacity, Context.ConnectionId, gameMode, totalRoundCount);
+            var isGuest = Context.User?.FindFirst(ClaimTypes.Anonymous)?.Value != null;
+            string? userId = null;
+            if (!isGuest)
+            {
+
+                userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            }
+            var lobby = _lobbyService.CreateLobby(lobbyName, capacity, Context.ConnectionId, gameMode, totalRoundCount, userId);
             Console.WriteLine(lobby.Id);
             var lobbies = _lobbyService.GetLobbies();
             await Groups.AddToGroupAsync(Context.ConnectionId, lobby.Id);
@@ -57,6 +64,7 @@ namespace GuessifyBackend.Hubs
         {
             var isGuest = Context.User?.FindFirst(ClaimTypes.Anonymous)?.Value != null;
             string name;
+            string? userId = null;
             if (isGuest)
             {
                 name = playerName!;
@@ -65,8 +73,9 @@ namespace GuessifyBackend.Hubs
             {
                 var userName = Context.User?.FindFirst(ClaimTypes.Name)?.Value;
                 name = userName!;
+                userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             }
-            var joinStatus = await _lobbyService.JoinLobbyWithCode(connectionCode, name, Context.ConnectionId);
+            var joinStatus = await _lobbyService.JoinLobbyWithCode(connectionCode, name, Context.ConnectionId, userId);
             return joinStatus;
         }
 
@@ -74,6 +83,7 @@ namespace GuessifyBackend.Hubs
         {
             var isGuest = Context.User?.FindFirst(ClaimTypes.Anonymous)?.Value != null;
             string name;
+            string? userId = null;
             if (isGuest)
             {
                 name = playerName!;
@@ -82,8 +92,9 @@ namespace GuessifyBackend.Hubs
             {
                 var userName = Context.User?.FindFirst(ClaimTypes.Name)?.Value;
                 name = userName!;
+                userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             }
-            var joinStatusDto = await _lobbyService.JoinLobby(lobbyId, name, Context.ConnectionId);
+            var joinStatusDto = await _lobbyService.JoinLobby(lobbyId, name, Context.ConnectionId, userId);
             return joinStatusDto;
 
         }

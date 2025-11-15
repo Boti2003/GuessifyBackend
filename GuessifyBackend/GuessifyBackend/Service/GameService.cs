@@ -75,11 +75,12 @@ namespace GuessifyBackend.Service
                 IsGuest = isGuest,
 
             };
+
+            game.Players.Add(player);
+            await _dbContext.SaveChangesAsync();
             await _gameHubContext.Groups.AddToGroupAsync(connectionId, gameId);
             var players = await this.GetPlayersInGame(gameId);
             await _gameHubContext.Clients.Group(gameId).ReceivePlayersInGame(players);
-            game.Players.Add(player);
-            await _dbContext.SaveChangesAsync();
             return new PlayerDto(player.Id.ToString(), player.Name, player.Score);
 
         }
@@ -125,11 +126,12 @@ namespace GuessifyBackend.Service
             game.GameRounds.Add(newRound);
             await _dbContext.SaveChangesAsync();
 
-            int roundCount = game.GameRounds.Count;
-            var status = await this.PlayGameRound(gameId, new GameRoundDto(newRound.Id.ToString(), newRound.GameCategoryId, category.Name, roundCount + 1));
+
+            var status = await this.PlayGameRound(gameId, new GameRoundDto(newRound.Id.ToString(), newRound.GameCategoryId, category.Name));
             if (status == GameStatus.ABORTED)
             {
                 await this.EndGame(gameId);
+                return status;
             }
             if (game.GameRounds.Count >= game.TotalRoundCount)
             {
@@ -137,8 +139,12 @@ namespace GuessifyBackend.Service
                 game.Status = GameStatus.FINISHED;
                 await this.EndGame(gameId);
                 await _dbContext.SaveChangesAsync();
+                await _gameHubContext.Clients.Group(gameId).ReceiveGameEnd(new GameEndDto(GameEndReason.ALL_ROUNDS_COMPLETED));
                 return GameStatus.FINISHED;
             }
+            int roundCount = game.GameRounds.Count;
+
+            await _gameHubContext.Clients.Group(gameId).ReceiveEndGameRound(roundCount + 1);
             return status;
 
         }
@@ -152,9 +158,10 @@ namespace GuessifyBackend.Service
             {
                 await Task.Delay(1000);
                 Console.WriteLine("1000 " + gameId);
-                var categoryGroups = await _categoryService.GetCategoryGroups();
-                Console.WriteLine("Managing remote game play for game: " + categoryGroups);
-                await _gameHubContext.Clients.Group(gameId).ReceiveVotingStarted(categoryGroups);
+
+                //Console.WriteLine("Managing remote game play for game: " + categoryGroups);
+                int voteTime = 10000;
+                await _gameHubContext.Clients.Group(gameId).ReceiveVotingStarted(new VotingTime(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), voteTime));
 
                 var tcs = new TaskCompletionSource<object>();
 
@@ -166,7 +173,7 @@ namespace GuessifyBackend.Service
                 _eventManager.SubscribeToEvent(gameId, handler, EventType.EVERYONE_VOTED);
 
 
-                await Task.WhenAny(tcs.Task, Task.Delay(10000));
+                await Task.WhenAny(tcs.Task, Task.Delay(voteTime));
 
                 _eventManager.UnsubscribeFromEvent(gameId, handler, EventType.EVERYONE_VOTED); //refactor event handling, shall be game level for all gamemode -> everyone voted as well
 
@@ -278,7 +285,9 @@ namespace GuessifyBackend.Service
                     return game.Status;
                 }
                 await _questionService.SetSendDateForQuestion(question.Id, DateTime.Now);
-                await _gameHubContext.Clients.Group(gameId).ReceiveNextQuestion(question);
+
+
+                await _gameHubContext.Clients.Group(gameId).ReceiveNextQuestion(new SendQuestionDto(question, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), 15000));
                 var tcs = new TaskCompletionSource<object>();
 
                 EventHandler handler = (sender, args) =>

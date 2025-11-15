@@ -63,9 +63,22 @@ namespace GuessifyBackend.Hubs
             await _gameService.RegisterAnswer(gameId, gameRoundId, questionId, answer, playerId, DateTime.Now);
         }
 
-        public async Task StartNewRound(string gameId, string categoryId)
+        public Task StartNewRound(string gameId, string categoryId)
         {
-            var gameStatus = await _gameService.StartNewRound(gameId, categoryId);
+            Task.Run(async () =>
+            {
+
+                using (var scope = _serviceFactory.CreateScope())
+                {
+                    var _scopedGameService = scope.ServiceProvider.GetRequiredService<GameService>();
+                    await _scopedGameService.StartNewRound(gameId, categoryId);
+                }
+
+            });
+
+            return Task.CompletedTask;
+
+            /*var gameStatus = await _gameService.StartNewRound(gameId, categoryId);
             if (gameStatus == GameStatus.IN_GAME)
             {
                 await Clients.Group(gameId).ReceiveEndGameRound();
@@ -73,7 +86,7 @@ namespace GuessifyBackend.Hubs
             else if (gameStatus == GameStatus.FINISHED)
             {
                 await Clients.Group(gameId).ReceiveGameEnd(new GameEndDto(GameEndReason.ALL_ROUNDS_COMPLETED));
-            }
+            }*/
 
 
         }

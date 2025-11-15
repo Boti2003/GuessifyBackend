@@ -10,7 +10,6 @@ namespace GuessifyBackend.Entities
         public Guid Id { get; set; }
         public string DeezerId { get; set; }
         public string Title { get; set; }
-        public int YearOfPublication { get; set; }
 
         public string Artist { get; set; }
 

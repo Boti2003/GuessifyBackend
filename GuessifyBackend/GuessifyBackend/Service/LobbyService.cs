@@ -18,9 +18,10 @@ namespace GuessifyBackend.Service
             _lobbies = new List<Lobby>();
         }
 
-        public LobbyDto CreateLobby(string name, int capacity, string connectionId, GameMode gameMode, int totalRoundCount)
+        public LobbyDto CreateLobby(string name, int capacity, string connectionId, GameMode gameMode, int totalRoundCount, string? userId)
         {
             string? connectionCode = null;
+            int currentPlayerCount = 0;
             if (gameMode == GameMode.LOCAL)
             {
                 char[] _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
@@ -40,7 +41,13 @@ namespace GuessifyBackend.Service
                     Console.WriteLine(connectionCode);
                 } while (existingCodes.Contains(connectionCode));
 
+
             }
+            else if (gameMode == GameMode.REMOTE)
+            {
+                currentPlayerCount = 1;
+            }
+
             Lobby lobby = new Lobby
             {
                 Id = Guid.NewGuid().ToString(),
@@ -49,30 +56,45 @@ namespace GuessifyBackend.Service
                 Status = LobbyStatus.OPEN,
                 Capacity = capacity,
                 HostConnectionId = connectionId,
+                CurrentPlayerCount = currentPlayerCount,
                 GameMode = gameMode,
                 ConnectionCode = connectionCode,
-                TotalRoundCount = totalRoundCount
+                TotalRoundCount = totalRoundCount,
+                HostUserId = userId
             };
             _lobbies.Add(lobby);
-            return new LobbyDto(lobby.Id, lobby.Name, lobby.Players.Count, lobby.Capacity, lobby.Status, lobby.GameMode, lobby.TotalRoundCount, lobby.ConnectionCode);
+            return new LobbyDto(lobby.Id, lobby.Name, lobby.CurrentPlayerCount, lobby.Capacity, lobby.Status, lobby.GameMode, lobby.TotalRoundCount, lobby.ConnectionCode);
         }
 
-        public async Task<JoinStatusDto> JoinLobbyWithCode(string code, string playerName, string connectionId)
+        public async Task<JoinStatusDto> JoinLobbyWithCode(string code, string playerName, string connectionId, string? userId)
         {
             var lobby = _lobbies.FirstOrDefault(l => l.ConnectionCode == code);
             if (lobby == null)
                 return new JoinStatusDto(null, JoinStatus.LOBBY_NOT_FOUND, null);
-            else if (lobby.Players.Count >= lobby.Capacity)
+            else if (lobby.CurrentPlayerCount >= lobby.Capacity)
                 return new JoinStatusDto(null, JoinStatus.LOBBY_FULL, null);
             else
             {
+                if (userId != null)
+                {
+                    var isPlayerInLobby = lobby.Players.Any(p => p.UserId == userId);
+                    if (isPlayerInLobby)
+                    {
+                        return new JoinStatusDto(null, JoinStatus.USER_ALREADY_IN_LOBBY, null);
+                    }
+                    else if (lobby.HostUserId == userId)
+                    {
+                        return new JoinStatusDto(null, JoinStatus.USER_HOST_GAME, null);
+                    }
+                }
 
                 var newPlayer = new Player
                 {
                     Id = Guid.NewGuid().ToString(),
                     Name = playerName,
                     Score = 0,
-                    ConnectionId = connectionId
+                    ConnectionId = connectionId,
+                    UserId = userId,
                 };
                 lobby.Players.Add(newPlayer);
 
@@ -86,21 +108,34 @@ namespace GuessifyBackend.Service
 
         }
 
-        public async Task<JoinStatusDto> JoinLobby(string lobbyId, string playerName, string connectionId)
+        public async Task<JoinStatusDto> JoinLobby(string lobbyId, string playerName, string connectionId, string? userId)
         {
             var lobby = _lobbies.Single(lobby => lobby.Id == lobbyId);
+            if (userId != null)
+            {
+                var isPlayerInLobby = lobby.Players.Any(p => p.Id == userId);
+                if (isPlayerInLobby)
+                {
+                    return new JoinStatusDto(null, JoinStatus.USER_ALREADY_IN_LOBBY, null);
+                }
+                else if (lobby.HostUserId == userId)
+                {
+                    return new JoinStatusDto(null, JoinStatus.USER_HOST_GAME, null);
+                }
+            }
             Console.WriteLine(lobby);
             var newPlayer = new Player
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = playerName,
                 Score = 0,
-                ConnectionId = connectionId
+                ConnectionId = connectionId,
+                UserId = userId
             };
-            if (lobby.Capacity <= lobby.Players.Count)
+            if (lobby.Capacity <= lobby.CurrentPlayerCount)
                 return new JoinStatusDto(null, JoinStatus.LOBBY_FULL, null);
-            lobby?.Players.Add(newPlayer);
-
+            lobby.Players.Add(newPlayer);
+            lobby.CurrentPlayerCount += 1;
             var lobbies = this.GetLobbies();
             var players = GetPlayersInLobby(lobbyId);
 
@@ -115,12 +150,11 @@ namespace GuessifyBackend.Service
             foreach (var lobby in _lobbies)
             {
                 Console.WriteLine(lobby.Name);
-                if (lobby.Status == LobbyStatus.CLOSED)
-                    continue;
+
                 lobbyDtos.Add(new LobbyDto(
                     lobby.Id,
                     lobby.Name,
-                    lobby.Players.Count,
+                    lobby.CurrentPlayerCount,
                     lobby.Capacity,
                     lobby.Status,
                     lobby.GameMode,

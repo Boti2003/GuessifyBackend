@@ -14,7 +14,7 @@ namespace GuessifyBackend.Service
             _deezerApiService = deezerApiService;
         }
 
-        public async Task BuildMusicSbStructure(SetupConfig config)
+        public async Task BuildMusicDbStructure(SetupConfig config)
         {
             /*_dbContext.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Songs', RESEED, 0)");
             _dbContext.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('GameCategories', RESEED, 0)");

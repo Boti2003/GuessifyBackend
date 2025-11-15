@@ -9,14 +9,14 @@ namespace GuessifyBackend.Hubs
 
         public Task ReceiveNewRoundStarted(GameRoundDto gameRound);
 
-        public Task ReceiveNextQuestion(QuestionDto question);
+        public Task ReceiveNextQuestion(SendQuestionDto question);
 
         public Task ReceiveEndAnswerTime(string correctAnswer);
 
-        public Task ReceiveEndGameRound();
+        public Task ReceiveEndGameRound(int nextRoundNumber);
         public Task ReceiveGameEnd(GameEndDto gameEndDto);
 
-        public Task ReceiveVotingStarted(List<CategoryGroupDto> categoryGroups);
+        public Task ReceiveVotingStarted(VotingTime votingTime);
 
         public Task ReceiveVotingEnded(CategoryDto categoryDto);
 

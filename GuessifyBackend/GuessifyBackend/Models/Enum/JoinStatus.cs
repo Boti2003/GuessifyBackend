@@ -5,5 +5,7 @@
         SUCCESS,
         LOBBY_FULL,
         LOBBY_NOT_FOUND,
+        USER_ALREADY_IN_LOBBY,
+        USER_HOST_GAME,
     }
 }
