@@ -2,10 +2,12 @@
 using GuessifyBackend.Entities;
 using GuessifyBackend.Entities.Identity;
 using GuessifyBackend.Hubs;
+using GuessifyBackend.Jobs;
 using GuessifyBackend.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Quartz;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -25,6 +27,7 @@ namespace GuessifyBackend
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<DeezerApiService>();
             builder.Services.AddScoped<MusicDbSetupService>();
+            builder.Services.AddScoped<SetupConfigService>();
             builder.Services.AddSingleton<LobbyService>();
             builder.Services.AddScoped<CategoryService>();
             builder.Services.AddScoped<TokenProviderService>();
@@ -34,6 +37,19 @@ namespace GuessifyBackend
             builder.Services.AddScoped<UserService>();
             builder.Services.AddSingleton<GameEventManager>();
             builder.Services.AddSingleton<VotingService>();
+            builder.Services.AddQuartz(q =>
+            {
+                // Just use the name of your job that you created in the Jobs folder.
+                var jobKey = new JobKey("SetupMusicDb");
+                q.AddJob<MusicDbSetupJob>(opts => opts.WithIdentity(jobKey));
+
+                q.AddTrigger(opts => opts
+                    .ForJob(jobKey)
+                    .WithIdentity("SetupMusicDb-trigger")
+                    .WithSchedule(CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Monday, 1, 0))
+                );
+            });
+            builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
             //builder.Services.AddControllers();
             builder.Services.AddControllers()
                     .AddJsonOptions(options =>
@@ -120,9 +136,7 @@ namespace GuessifyBackend
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            var setup = await SetupConfigService.ParseConfigData("setup_game.json");
-            var dbSetupService = new MusicDbSetupService(builder.Services.BuildServiceProvider().GetRequiredService<GameDbContext>(), builder.Services.BuildServiceProvider().GetRequiredService<DeezerApiService>());
-            await dbSetupService.BuildMusicDbStructure(setup);
+
 
             builder.Services.AddCors(options =>
             {

@@ -185,7 +185,7 @@ namespace GuessifyBackend.Service
                 var category = await _categoryService.GetCategory(categoryId);
                 await _gameHubContext.Clients.Group(gameId).ReceiveVotingEnded(category);
                 _votingService.ResetVotesForGame(gameId);
-                await Task.Delay(3000);
+                await Task.Delay(4000);
                 gameStatus = await this.StartNewRound(gameId, categoryId);
             }
 

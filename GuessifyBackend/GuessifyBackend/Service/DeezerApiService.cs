@@ -20,24 +20,76 @@ namespace GuessifyBackend.Service
         public async Task<MinimalAlbumListResponse?> GetAlbumsList(string artistId)
         {
             string path = $"https://api.deezer.com/artist/{artistId}/albums";
-            HttpResponseMessage response = await client.GetAsync(path);
+            HttpResponseMessage response;
             MinimalAlbumListResponse? albumsList = null;
-            if (response.IsSuccessStatusCode)
+            //Console.WriteLine("GET ALBUM LIST " + response.StatusCode + " ARTIST_ID " + artistId);
+            int retryCount = 3;
+            bool success = false;
+            while (retryCount > 0 && !success)
             {
-                albumsList = await response.Content.ReadFromJsonAsync<MinimalAlbumListResponse>(serializerOptions);
+                response = await client.GetAsync(path);
+                var rawData = await response.Content.ReadAsStringAsync();
+                var data = JsonDocument.Parse(rawData);
+                if (data.RootElement.TryGetProperty("error", out var errorElement))
+                {
+                    if (errorElement.TryGetProperty("code", out var code))
+                    {
+                        if (code.GetInt32() == 4)
+                        {
+                            Console.WriteLine("CODE " + code);
+                            await Task.Delay(5000);
+                            retryCount--;
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    albumsList = await response.Content.ReadFromJsonAsync<MinimalAlbumListResponse>(serializerOptions);
+                    success = true;
+                }
+
+                Console.WriteLine($"{albumsList?.MinimalAlbumsList.Count} albums found");
             }
+
             return albumsList;
         }
 
         public async Task<AlbumResponse?> GetAlbum(string albumId)
         {
             string path = $"https://api.deezer.com/album/{albumId}";
-            HttpResponseMessage response = await client.GetAsync(path);
+            HttpResponseMessage response;
             AlbumResponse? album = null;
-            if (response.IsSuccessStatusCode)
+            int retryCount = 3;
+            bool success = false;
+            while (retryCount > 0 && !success)
             {
-                album = await response.Content.ReadFromJsonAsync<AlbumResponse>(serializerOptions);
+                response = await client.GetAsync(path);
+                var rawData = await response.Content.ReadAsStringAsync();
+                var data = JsonDocument.Parse(rawData);
+                if (data.RootElement.TryGetProperty("error", out var errorElement))
+                {
+                    if (errorElement.TryGetProperty("code", out var code))
+                    {
+                        if (code.GetInt32() == 4)
+                        {
+                            Console.WriteLine("CODE " + code);
+                            await Task.Delay(5000);
+                            retryCount--;
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    album = await response.Content.ReadFromJsonAsync<AlbumResponse>(serializerOptions);
+                    success = true;
+                }
+
             }
+
             return album;
         }
 

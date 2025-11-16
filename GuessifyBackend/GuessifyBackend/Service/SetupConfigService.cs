@@ -5,7 +5,7 @@ namespace GuessifyBackend.Service
 {
     public class SetupConfigService
     {
-        public static async Task<SetupConfig> ParseConfigData(string filePath)
+        public async Task<SetupConfig> ParseConfigData(string filePath)
         {
             FileStream stream = File.OpenRead(filePath);
             return await JsonSerializer.DeserializeAsync<SetupConfig>(stream);
