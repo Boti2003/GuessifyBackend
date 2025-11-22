@@ -3,7 +3,8 @@ using GuessifyBackend.Entities;
 using GuessifyBackend.Entities.Identity;
 using GuessifyBackend.Hubs;
 using GuessifyBackend.Jobs;
-using GuessifyBackend.Service;
+using GuessifyBackend.Service.Implementations;
+using GuessifyBackend.Service.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -16,7 +17,7 @@ namespace GuessifyBackend
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
 
             var builder = WebApplication.CreateBuilder(args);
@@ -26,18 +27,18 @@ namespace GuessifyBackend
             // Add services to the container.
             builder.Services.AddDbContext<GameDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddScoped<DeezerApiService>();
-            builder.Services.AddScoped<MusicDbSetupService>();
-            builder.Services.AddScoped<SetupConfigService>();
-            builder.Services.AddSingleton<LobbyService>();
-            builder.Services.AddScoped<CategoryService>();
-            builder.Services.AddScoped<TokenProviderService>();
-            builder.Services.AddScoped<GameService>();
-            builder.Services.AddScoped<QuestionService>();
-            builder.Services.AddScoped<AuthService>();
-            builder.Services.AddScoped<UserService>();
-            builder.Services.AddSingleton<GameEventManager>();
-            builder.Services.AddSingleton<VotingService>();
+            builder.Services.AddScoped<IDeezerApiService, DeezerApiService>();
+            builder.Services.AddScoped<IMusicDbSetupService, MusicDbSetupService>();
+            builder.Services.AddScoped<ISetupConfigService, SetupConfigService>();
+            builder.Services.AddSingleton<ILobbyService, LobbyService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<ITokenProviderService, TokenProviderService>();
+            builder.Services.AddScoped<IGameService, GameService>();
+            builder.Services.AddScoped<IQuestionService, QuestionService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddSingleton<IGameEventManager, GameEventManager>();
+            builder.Services.AddSingleton<IVotingService, VotingService>();
             builder.Services.AddProblemDetails();
             builder.Host.UseSerilog();
             builder.Services.AddQuartz(q =>

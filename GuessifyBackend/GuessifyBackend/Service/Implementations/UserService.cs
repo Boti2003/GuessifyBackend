@@ -1,12 +1,13 @@
 ﻿using GuessifyBackend.DTO.AuthDto;
 using GuessifyBackend.Entities;
 using GuessifyBackend.Entities.Identity;
+using GuessifyBackend.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace GuessifyBackend.Service
+namespace GuessifyBackend.Service.Implementations
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
         private readonly GameDbContext _dbContext;

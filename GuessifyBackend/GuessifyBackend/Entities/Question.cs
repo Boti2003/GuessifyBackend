@@ -9,11 +9,11 @@ namespace GuessifyBackend.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        public List<string> AnswerOptions { get; set; }
+        public List<string> AnswerOptions { get; set; } = null!;
         public DateTime SendTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public string SongId { get; set; }
-        public string CorrectAnswer { get; set; }
+        public DateTime? EndTime { get; set; }
+        public string SongId { get; set; } = null!;
+        public string CorrectAnswer { get; set; } = null!;
 
     }
 }

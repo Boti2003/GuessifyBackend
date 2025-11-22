@@ -8,11 +8,10 @@ namespace GuessifyBackend.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        public string DeezerId { get; set; }
-        public string Title { get; set; }
+        public string DeezerId { get; set; } = null!;
+        public string Title { get; set; } = null!;
         public int YearOfPublication { get; set; }
-        public string Artist { get; set; }
-
-        public string Album { get; set; }
+        public string Artist { get; set; } = null!;
+        public string Album { get; set; } = null!;
     }
 }

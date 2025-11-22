@@ -1,8 +1,6 @@
 ﻿namespace GuessifyBackend.DTO.GameModel
 {
-    public class CategoryDto
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-    }
+    public record CategoryDto(string Id, string Name);
+
+
 }

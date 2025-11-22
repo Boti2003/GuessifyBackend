@@ -2,11 +2,12 @@
 using GuessifyBackend.Hubs;
 using GuessifyBackend.Models;
 using GuessifyBackend.Models.Enum;
+using GuessifyBackend.Service.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
-namespace GuessifyBackend.Service
+namespace GuessifyBackend.Service.Implementations
 {
-    public class LobbyService
+    public class LobbyService : ILobbyService
     {
         private List<Lobby> _lobbies;
 
@@ -18,7 +19,7 @@ namespace GuessifyBackend.Service
             _lobbies = new List<Lobby>();
         }
 
-        public LobbyDto CreateLobby(string name, int capacity, string connectionId, GameMode gameMode, int totalRoundCount, string? userId, string? userName)
+        public async Task<LobbyDto> CreateLobby(string name, int capacity, string connectionId, GameMode gameMode, int totalRoundCount, string? userId, string? userName)
         {
             string? connectionCode = null;
             int currentPlayerCount = 0;
@@ -64,6 +65,10 @@ namespace GuessifyBackend.Service
                 HostUserName = userName
             };
             _lobbies.Add(lobby);
+            Console.WriteLine(lobby.Id);
+            var lobbies = GetLobbies();
+            await _lobbyHubContext.Groups.AddToGroupAsync(connectionId, lobby.Id);
+            await _lobbyHubContext.Clients.All.ReceiveLobbies(lobbies);
             return new LobbyDto(lobby.Id, lobby.Name, lobby.CurrentPlayerCount, lobby.Capacity, lobby.Status, lobby.GameMode, lobby.TotalRoundCount, lobby.ConnectionCode);
         }
 
@@ -101,9 +106,9 @@ namespace GuessifyBackend.Service
                 };
                 lobby.Players.Add(newPlayer);
 
-                var lobbies = this.GetLobbies();
+                var lobbies = GetLobbies();
 
-                var players = this.GetPlayersInLobby(lobby.Id);
+                var players = GetPlayersInLobby(lobby.Id);
                 await _lobbyHubContext.Groups.AddToGroupAsync(connectionId, lobby.Id);
                 await _lobbyHubContext.Clients.All.ReceiveLobbies(lobbies);
                 return new JoinStatusDto(new PlayerDto(newPlayer.Id, newPlayer.Name, newPlayer.Score), JoinStatus.SUCCESS, lobby.Id);
@@ -141,7 +146,7 @@ namespace GuessifyBackend.Service
                 return new JoinStatusDto(null, JoinStatus.USERNAME_TAKEN, null);
             lobby.Players.Add(newPlayer);
             lobby.CurrentPlayerCount += 1;
-            var lobbies = this.GetLobbies();
+            var lobbies = GetLobbies();
             var players = GetPlayersInLobby(lobbyId);
 
             await _lobbyHubContext.Groups.AddToGroupAsync(connectionId, lobbyId);
@@ -172,14 +177,16 @@ namespace GuessifyBackend.Service
             return lobbyDtos;
         }
 
+
         public async Task HandleLobbyLeaving(string connectionId)
         {
+            Console.WriteLine("Client disconnected: " + connectionId);
             var lobby = _lobbies.Find(lobby => lobby.HostConnectionId == connectionId);
             if (lobby != null)
             {
                 await _lobbyHubContext.Clients.Group(lobby.Id).ReceiveHostDisconnectedFromLobby();
                 _lobbies.Remove(lobby);
-                var remainingLobbiesDto = this.GetLobbies();
+                var remainingLobbiesDto = GetLobbies();
                 await _lobbyHubContext.Clients.All.ReceiveLobbies(remainingLobbiesDto);
                 return;
             }
@@ -189,8 +196,8 @@ namespace GuessifyBackend.Service
                 if (player != null)
                 {
                     l.Players.Remove(player);
-                    var lobbiesDto = this.GetLobbies();
-                    var players = this.GetPlayersInLobby(l.Id);
+                    var lobbiesDto = GetLobbies();
+                    var players = GetPlayersInLobby(l.Id);
                     await _lobbyHubContext.Clients.All.ReceiveLobbies(lobbiesDto);
                     await _lobbyHubContext.Clients.Group(l.Id).ReceivePlayersInLobby(players);
                     return;

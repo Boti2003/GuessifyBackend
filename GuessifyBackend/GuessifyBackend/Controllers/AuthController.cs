@@ -1,5 +1,5 @@
 ﻿using GuessifyBackend.DTO.AuthDto;
-using GuessifyBackend.Service;
+using GuessifyBackend.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -11,9 +11,9 @@ namespace GuessifyBackend.Controllers
     public class AuthController : ControllerBase
     {
 
-        private readonly AuthService _authService;
+        private readonly IAuthService _authService;
 
-        public AuthController(AuthService authService)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
         }

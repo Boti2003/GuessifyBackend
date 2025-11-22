@@ -1,10 +1,11 @@
 ﻿using GuessifyBackend.DTO.GameModel;
 using GuessifyBackend.Entities;
+using GuessifyBackend.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace GuessifyBackend.Service
+namespace GuessifyBackend.Service.Implementations
 {
-    public class CategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly GameDbContext _dbContext;
         public CategoryService(GameDbContext gameDbContext)
@@ -20,18 +21,11 @@ namespace GuessifyBackend.Service
                 List<CategoryDto> categoryDtos = new List<CategoryDto>();
                 foreach (var category in categoryGroup.Categories)
                 {
-                    categoryDtos.Add(new CategoryDto
-                    {
-                        Id = category.Id.ToString(),
-                        Name = category.Name
-                    });
+                    categoryDtos.Add(new CategoryDto(category.Id.ToString(), category.Name));
+
                 }
-                categoryGroupDtos.Add(new CategoryGroupDto
-                {
-                    Id = categoryGroup.Id.ToString(),
-                    Name = categoryGroup.Name,
-                    Categories = categoryDtos,
-                });
+                categoryGroupDtos.Add(new CategoryGroupDto(categoryGroup.Id.ToString(), categoryGroup.Name, categoryDtos));
+
             }
             return categoryGroupDtos;
         }
@@ -43,11 +37,8 @@ namespace GuessifyBackend.Service
             {
                 throw new ArgumentException("Category does not found");
             }
-            return new CategoryDto
-            {
-                Id = category.Id.ToString(),
-                Name = category.Name
-            };
+            return new CategoryDto(category.Id.ToString(), category.Name);
+
         }
 
         public async Task<string> GetRandomCategoryId()

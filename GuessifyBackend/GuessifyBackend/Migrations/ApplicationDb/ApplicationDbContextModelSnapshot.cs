@@ -44,7 +44,7 @@ namespace GuessifyBackend.Migrations.ApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("GuessifyBackend.Entities.Identity.User", b =>

@@ -1,7 +1,7 @@
 ﻿using GuessifyBackend.DTO.GameModel;
 using GuessifyBackend.DTO.LobbyModel;
 using GuessifyBackend.Models.Enum;
-using GuessifyBackend.Service;
+using GuessifyBackend.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
@@ -11,18 +11,16 @@ namespace GuessifyBackend.Hubs
     [Authorize]
     public class GameHub : Hub<IGameClient>
     {
-        private readonly CategoryService _categoryService;
-        private readonly GameService _gameService;
-        private readonly QuestionService _questionService;
-        private readonly VotingService _votingService;
+        private readonly ICategoryService _categoryService;
+        private readonly IGameService _gameService;
+        private readonly IVotingService _votingService;
         private readonly IServiceScopeFactory _serviceFactory;
 
 
-        public GameHub(CategoryService categoryService, GameService gameService, QuestionService questionService, VotingService votingService, IServiceScopeFactory serviceFactory)
+        public GameHub(ICategoryService categoryService, IGameService gameService, IVotingService votingService, IServiceScopeFactory serviceFactory)
         {
             _categoryService = categoryService;
             _gameService = gameService;
-            _questionService = questionService;
             _votingService = votingService;
             _serviceFactory = serviceFactory;
         }
@@ -33,19 +31,8 @@ namespace GuessifyBackend.Hubs
 
         public async Task<GameDto> StartGame(string gameName, GameMode gameMode, int totalRoundCount)
         {
-
-            var startTime = DateTime.Now;
-            GameDto game;
-            if (gameMode == GameMode.LOCAL)
-            {
-                game = await _gameService.StartNewGame(gameName, startTime, gameMode, totalRoundCount, Context.ConnectionId);
-                await Groups.AddToGroupAsync(Context.ConnectionId, game.Id);
-            }
-            else
-            {
-                game = await _gameService.StartNewGame(gameName, startTime, gameMode, totalRoundCount);
-            }
-            return game;
+            var hostConnectionId = gameMode == GameMode.LOCAL ? Context.ConnectionId : null;
+            return await _gameService.StartNewGame(gameName, DateTime.Now, gameMode, totalRoundCount, hostConnectionId); ;
         }
 
         public async Task<PlayerDto> JoinGame(string? playerName, string gameId)
@@ -66,12 +53,21 @@ namespace GuessifyBackend.Hubs
         {
             Task.Run(async () =>
             {
-
-                using (var scope = _serviceFactory.CreateScope())
+                try
                 {
-                    var _scopedGameService = scope.ServiceProvider.GetRequiredService<GameService>();
-                    await _scopedGameService.StartNewRound(gameId, categoryId);
+                    using (var scope = _serviceFactory.CreateScope())
+                    {
+                        var _scopedGameService = scope.ServiceProvider.GetRequiredService<IGameService>();
+                        await _scopedGameService.StartNewRound(gameId, categoryId);
+                    }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error in StartNewRound: " + ex.Message);
+                    Console.WriteLine(ex.InnerException);
+                    throw ex;
+                }
+
 
             });
 
@@ -93,12 +89,21 @@ namespace GuessifyBackend.Hubs
         {
             Task.Run(async () =>
             {
-
-                using (var scope = _serviceFactory.CreateScope())
+                try
                 {
-                    var _scopedGameService = scope.ServiceProvider.GetRequiredService<GameService>();
-                    await _scopedGameService.ManageRemoteGamePlay(gameId);
+
+                    using (var scope = _serviceFactory.CreateScope())
+                    {
+                        var _scopedGameService = scope.ServiceProvider.GetRequiredService<IGameService>();
+                        await _scopedGameService.ManageRemoteGamePlay(gameId);
+                    }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error in ManageRemoteGame: " + ex.Message);
+                    throw ex;
+                }
+
 
             });
             return Task.CompletedTask;

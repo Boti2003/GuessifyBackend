@@ -3,32 +3,37 @@ using GuessifyBackend.DTO.LobbyModel;
 using GuessifyBackend.Entities;
 using GuessifyBackend.Hubs;
 using GuessifyBackend.Models.Enum;
+using GuessifyBackend.Service.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
-namespace GuessifyBackend.Service
+namespace GuessifyBackend.Service.Implementations
 {
-    public class GameService
+    public class GameService : IGameService
     {
         private readonly GameDbContext _dbContext;
 
-        private readonly CategoryService _categoryService;
+        private readonly ICategoryService _categoryService;
 
-        private readonly QuestionService _questionService;
+        private readonly IQuestionService _questionService;
 
-        private readonly DeezerApiService _deezerApiService;
+        private readonly IDeezerApiService _deezerApiService;
 
-        private readonly GameEventManager _eventManager;
+        private readonly IGameEventManager _eventManager;
 
-        private readonly VotingService _votingService;
+        private readonly IVotingService _votingService;
 
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        private IHubContext<GameHub, IGameClient> _gameHubContext { get; }
+        private readonly IConfiguration _configuration;
 
-        //private List<Game> games = new List<Game>();
+        private IHubContext<GameHub, IGameClient> _gameHubContext
+        {
+            get;
+        }
 
-        public GameService(GameDbContext dbContext, CategoryService categoryService, QuestionService questionService, DeezerApiService deezerApiService, IHubContext<GameHub, IGameClient> hubContext, GameEventManager gameEventManager, VotingService votingService, UserService userService)
+
+        public GameService(IConfiguration configuration, GameDbContext dbContext, ICategoryService categoryService, IQuestionService questionService, IDeezerApiService deezerApiService, IHubContext<GameHub, IGameClient> hubContext, IGameEventManager gameEventManager, IVotingService votingService, IUserService userService)
         {
             _categoryService = categoryService;
             _dbContext = dbContext;
@@ -38,6 +43,7 @@ namespace GuessifyBackend.Service
             _eventManager = gameEventManager;
             _votingService = votingService;
             _userService = userService;
+            _configuration = configuration;
         }
 
         public async Task<GameDto> StartNewGame(string name, DateTime startTime, GameMode gameMode, int totalRoundCount, string? hostConnectionId = null)
@@ -55,8 +61,20 @@ namespace GuessifyBackend.Service
             };
             await _dbContext.Games.AddAsync(newGame);
             await _dbContext.SaveChangesAsync();
-            _votingService.AddVoteSummaryForGame(newGame.Id.ToString());
+            if (gameMode == GameMode.REMOTE)
+            {
+                _votingService.AddVoteSummaryForGame(newGame.Id.ToString());
+            }
+            else if (gameMode == GameMode.LOCAL)
+            {
+                if (hostConnectionId == null)
+                {
+                    throw new ArgumentException("Host connection ID cannot be null for local games");
+                }
+                await _gameHubContext.Groups.AddToGroupAsync(hostConnectionId, newGame.Id.ToString());
+            }
             _eventManager.RegisterNewGameEventState(newGame.Id.ToString());
+
             return new GameDto(newGame.Id.ToString(), newGame.Name, newGame.Mode, totalRoundCount);
 
         }
@@ -79,7 +97,7 @@ namespace GuessifyBackend.Service
             game.Players.Add(player);
             await _dbContext.SaveChangesAsync();
             await _gameHubContext.Groups.AddToGroupAsync(connectionId, gameId);
-            var players = await this.GetPlayersInGame(gameId);
+            var players = await GetPlayersInGame(gameId);
             await _gameHubContext.Clients.Group(gameId).ReceivePlayersInGame(players);
             return new PlayerDto(player.Id.ToString(), player.Name, player.Score);
 
@@ -87,10 +105,7 @@ namespace GuessifyBackend.Service
 
         public async Task<List<PlayerDto>> GetPlayersInGame(string gameId)
         {
-            var games = await _dbContext.Games.Include(g => g.Players).ToListAsync();
-            var game = games.FirstOrDefault(g => g.Id == Guid.Parse(gameId));
-            Console.WriteLine(game.Mode);
-            Console.WriteLine(game.Status);
+            var game = await _dbContext.Games.Include(g => g.Players).SingleAsync(g => g.Id == Guid.Parse(gameId));
             if (game == null)
             {
                 throw new ArgumentException("Game does not exists");
@@ -127,17 +142,17 @@ namespace GuessifyBackend.Service
             await _dbContext.SaveChangesAsync();
 
 
-            var status = await this.PlayGameRound(gameId, new GameRoundDto(newRound.Id.ToString(), newRound.GameCategoryId, category.Name));
+            var status = await PlayGameRound(gameId, new GameRoundDto(newRound.Id.ToString(), newRound.GameCategoryId, category.Name));
             if (status == GameStatus.ABORTED)
             {
-                await this.EndGame(gameId);
+                await EndGame(gameId);
                 return status;
             }
             if (game.GameRounds.Count >= game.TotalRoundCount)
             {
                 Console.WriteLine(game.GameRounds.Count);
                 game.Status = GameStatus.FINISHED;
-                await this.EndGame(gameId);
+                await EndGame(gameId);
                 await _dbContext.SaveChangesAsync();
                 await _gameHubContext.Clients.Group(gameId).ReceiveGameEnd(new GameEndDto(GameEndReason.ALL_ROUNDS_COMPLETED));
                 return GameStatus.FINISHED;
@@ -157,10 +172,8 @@ namespace GuessifyBackend.Service
             while (gameStatus == GameStatus.IN_GAME)
             {
                 await Task.Delay(1000);
-                Console.WriteLine("1000 " + gameId);
 
-                //Console.WriteLine("Managing remote game play for game: " + categoryGroups);
-                int voteTime = 10000;
+                int voteTime = _configuration.GetValue<int>("GameConstants:VotingTimeInMilisec");
                 await _gameHubContext.Clients.Group(gameId).ReceiveVotingStarted(new VotingTime(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), voteTime));
 
                 var tcs = new TaskCompletionSource<object>();
@@ -185,8 +198,9 @@ namespace GuessifyBackend.Service
                 var category = await _categoryService.GetCategory(categoryId);
                 await _gameHubContext.Clients.Group(gameId).ReceiveVotingEnded(category);
                 _votingService.ResetVotesForGame(gameId);
-                await Task.Delay(4000);
-                gameStatus = await this.StartNewRound(gameId, categoryId);
+                var waitingTime = _configuration.GetValue<int>("GameConstants:WaitingTimeInMilisec");
+                await Task.Delay(waitingTime);
+                gameStatus = await StartNewRound(gameId, categoryId);
             }
 
 
@@ -202,7 +216,7 @@ namespace GuessifyBackend.Service
                 .Select(a => a.PlayerId).ToList();
             for (int i = 0; i < correctPlayerIds.Count; i++)
             {
-                var points = Math.Max(100 - (i * 10), 50);
+                var points = Math.Max(100 - i * 10, 50);
                 answers.First(a => a.PlayerId == correctPlayerIds[i]).PointsAwarded = points;
                 var player = await _dbContext.Players.FirstOrDefaultAsync(p => p.Id.ToString() == correctPlayerIds[i]);
                 if (player != null) { player.Score += points; }
@@ -215,7 +229,7 @@ namespace GuessifyBackend.Service
         {
             var gameRound = await _dbContext.GameRounds
                 .Include(gr => gr.Questions)
-                .FirstOrDefaultAsync(gr => gr.Id == Guid.Parse(gameRoundId));
+                .SingleAsync(gr => gr.Id == Guid.Parse(gameRoundId));
             var questions = gameRound.Questions;
             List<QuestionDto> questionDtos = new List<QuestionDto>();
             foreach (var question in questions)
@@ -248,18 +262,23 @@ namespace GuessifyBackend.Service
                 throw new ArgumentException("Question not found");
             }
             var elapsedTime = (time - question.SendTime).TotalMilliseconds;
+            var answerTime = _configuration.GetValue<int>("GameConstants:AnswerTimeInMilisec");
+            if (elapsedTime > answerTime)
+            {
+                throw new ArgumentException("Answer time exceeded");
+            }
             var playerAnswer = new PlayerAnswer
             {
                 QuestionId = question.Id.ToString(),
                 PlayerId = playerId,
                 SelectedAnswer = answer,
-                IsCorrect = (question.CorrectAnswer == answer),
-                AnswerTimeInMilliseconds = (int)(elapsedTime),
+                IsCorrect = question.CorrectAnswer == answer,
+                AnswerTimeInMilliseconds = (int)elapsedTime,
             };
             gameRound.Answers.Add(playerAnswer);
             await _dbContext.SaveChangesAsync();
 
-            var playerCount = await this.GetPlayerCountInGame(gameId);
+            var playerCount = await GetPlayerCountInGame(gameId);
             Console.WriteLine("Players: " + gameRound.Answers.Count + " " + playerCount);
             if (gameRound.Answers.FindAll(gr => gr.QuestionId.ToString() == question.Id.ToString()).Count >= playerCount)
             {
@@ -272,7 +291,7 @@ namespace GuessifyBackend.Service
         {
 
             await _gameHubContext.Clients.Group(gameId).ReceiveNewRoundStarted(gameRound);
-            var questions = await this.GetQuestionsInGameRound(gameRound.Id);
+            var questions = await GetQuestionsInGameRound(gameRound.Id);
             foreach (var question in questions)
             {
                 var game = await _dbContext.Games.
@@ -290,8 +309,10 @@ namespace GuessifyBackend.Service
                 }
                 await _questionService.SetSendDateForQuestion(question.Id, DateTime.Now);
 
+                var answerTime = _configuration.GetValue<int>("GameConstants:AnswerTimeInMilisec");
+                await _gameHubContext.Clients.Group(gameId).ReceiveNextQuestion(new SendQuestionDto(question, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), answerTime));
 
-                await _gameHubContext.Clients.Group(gameId).ReceiveNextQuestion(new SendQuestionDto(question, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), 15000));
+
                 var tcs = new TaskCompletionSource<object>();
 
                 EventHandler handler = (sender, args) =>
@@ -302,7 +323,9 @@ namespace GuessifyBackend.Service
                 _eventManager.SubscribeToEvent(game.Id.ToString(), handler, EventType.EVERYONE_ANSWERED);
 
 
-                await Task.WhenAny(tcs.Task, Task.Delay(15000));
+                await Task.WhenAny(tcs.Task, Task.Delay(answerTime));
+
+                await _questionService.SetEndDateForQuestion(question.Id, DateTime.Now);
 
                 _eventManager.UnsubscribeFromEvent(game.Id.ToString(), handler, EventType.EVERYONE_ANSWERED);
 
@@ -311,10 +334,11 @@ namespace GuessifyBackend.Service
                     throw new ArgumentException("Question not found");
                 var correctAnswer = questionEntity.CorrectAnswer;
                 await _gameHubContext.Clients.Group(gameId).ReceiveEndAnswerTime(correctAnswer);
-                await this.DistributePointsBetweenPlayers(question.Id);
-                var players = await this.GetPlayersInGame(gameId);
+                await DistributePointsBetweenPlayers(question.Id);
+                var players = await GetPlayersInGame(gameId);
                 await _gameHubContext.Clients.Group(gameId).ReceivePlayersInGame(players);
-                await Task.Delay(5000);
+                var waitingTime = _configuration.GetValue<int>("GameConstants:WaitingTimeInMilisec");
+                await Task.Delay(waitingTime);
             }
             return GameStatus.IN_GAME;
 
@@ -352,7 +376,7 @@ namespace GuessifyBackend.Service
                     }
                     else
                     {
-                        var players = await this.GetPlayersInGame(game.Id.ToString());
+                        var players = await GetPlayersInGame(game.Id.ToString());
                         await _gameHubContext.Clients.Group(game.Id.ToString()).ReceivePlayersInGame(players);
                     }
 
@@ -390,7 +414,7 @@ namespace GuessifyBackend.Service
             }
             game.EndTime = DateTime.Now;
             _votingService.RemoveVoteSummaryForGame(gameId);
-            //Unsubscribe from game events
+            _eventManager.RemoveGameEventState(gameId);
             await _dbContext.SaveChangesAsync();
         }
 

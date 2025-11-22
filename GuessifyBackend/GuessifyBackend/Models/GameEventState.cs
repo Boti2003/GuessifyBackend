@@ -2,7 +2,7 @@
 
 namespace GuessifyBackend.Models
 {
-    public class GameRoundEventState
+    public class GameEventState
     {
 
         private event EventHandler EveryoneAnsweredInGame = null!;

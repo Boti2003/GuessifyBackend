@@ -1,15 +1,16 @@
 ﻿using GuessifyBackend.DTO.AuthDto;
 using GuessifyBackend.Entities.Identity;
+using GuessifyBackend.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
-namespace GuessifyBackend.Service
+namespace GuessifyBackend.Service.Implementations
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
         private readonly UserManager<User> _userManager;
-        private readonly TokenProviderService _tokenService;
+        private readonly ITokenProviderService _tokenService;
 
-        public AuthService(UserManager<User> userManager, TokenProviderService tokenService)
+        public AuthService(UserManager<User> userManager, ITokenProviderService tokenService)
         {
             _userManager = userManager;
             _tokenService = tokenService;

@@ -9,7 +9,7 @@ namespace GuessifyBackend.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public virtual List<GameCategory> Categories { get; set; }
+        public string Name { get; set; } = null!;
+        public virtual List<GameCategory> Categories { get; set; } = null!;
     }
 }

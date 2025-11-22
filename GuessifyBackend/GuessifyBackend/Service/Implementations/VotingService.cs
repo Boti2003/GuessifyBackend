@@ -1,16 +1,17 @@
 ﻿using GuessifyBackend.Models;
 using GuessifyBackend.Models.Enum;
+using GuessifyBackend.Service.Interfaces;
 using System.Collections.Concurrent;
 
-namespace GuessifyBackend.Service
+namespace GuessifyBackend.Service.Implementations
 {
-    public class VotingService
+    public class VotingService : IVotingService
     {
 
         private List<VoteSummary> _voteSummaries;
-        private readonly GameEventManager _gameEventManager;
+        private readonly IGameEventManager _gameEventManager;
 
-        public VotingService(GameEventManager gameEventManager)
+        public VotingService(IGameEventManager gameEventManager)
         {
             _voteSummaries = new List<VoteSummary>();
             _gameEventManager = gameEventManager;

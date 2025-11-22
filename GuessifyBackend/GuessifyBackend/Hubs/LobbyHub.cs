@@ -1,6 +1,6 @@
 ﻿using GuessifyBackend.DTO.LobbyModel;
 using GuessifyBackend.Models.Enum;
-using GuessifyBackend.Service;
+using GuessifyBackend.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
@@ -10,9 +10,9 @@ namespace GuessifyBackend.Hubs
     [Authorize]
     public class LobbyHub : Hub<IlobbyClient>
     {
-        private readonly LobbyService _lobbyService;
-        private readonly GameService _gameService;
-        public LobbyHub(LobbyService lobbyService, GameService gameService)
+        private readonly ILobbyService _lobbyService;
+        private readonly IGameService _gameService;
+        public LobbyHub(ILobbyService lobbyService, IGameService gameService)
         {
             _lobbyService = lobbyService;
             _gameService = gameService;
@@ -27,15 +27,12 @@ namespace GuessifyBackend.Hubs
                 userName = Context.User?.FindFirst(ClaimTypes.Name)?.Value;
                 userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             }
-            var lobby = _lobbyService.CreateLobby(lobbyName, capacity, Context.ConnectionId, gameMode, totalRoundCount, userId, userName);
-            Console.WriteLine(lobby.Id);
-            var lobbies = _lobbyService.GetLobbies();
-            await Groups.AddToGroupAsync(Context.ConnectionId, lobby.Id);
-            await Clients.All.ReceiveLobbies(lobbies);
+            var lobby = await _lobbyService.CreateLobby(lobbyName, capacity, Context.ConnectionId, gameMode, totalRoundCount, userId, userName);
+
             return lobby;
         }
 
-        public async Task<List<LobbyDto>> GetLobbies()
+        public List<LobbyDto> GetLobbies()
         {
             var lobbies = _lobbyService.GetLobbies();
             return lobbies;
@@ -43,7 +40,6 @@ namespace GuessifyBackend.Hubs
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            Console.WriteLine("Client disconnected: " + Context.ConnectionId);
             await _lobbyService.HandleLobbyLeaving(Context.ConnectionId);
         }
 

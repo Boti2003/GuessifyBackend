@@ -1,22 +1,23 @@
 ﻿using GuessifyBackend.Models;
 using GuessifyBackend.Models.Enum;
+using GuessifyBackend.Service.Interfaces;
 using System.Collections.Concurrent;
 
-namespace GuessifyBackend.Service
+namespace GuessifyBackend.Service.Implementations
 {
-    public class GameEventManager
+    public class GameEventManager : IGameEventManager
     {
 
-        private ConcurrentDictionary<string, GameRoundEventState> _gameEvents;
+        private ConcurrentDictionary<string, GameEventState> _gameEvents;
 
         public GameEventManager()
         {
-            _gameEvents = new ConcurrentDictionary<string, GameRoundEventState>();
+            _gameEvents = new ConcurrentDictionary<string, GameEventState>();
         }
 
         public void RegisterNewGameEventState(string gameId)
         {
-            _gameEvents.TryAdd(gameId, new GameRoundEventState());
+            _gameEvents.TryAdd(gameId, new GameEventState());
 
         }
 
@@ -36,5 +37,9 @@ namespace GuessifyBackend.Service
             _gameEvents[gameId].UnsubscribeFromEvent(handler, eventType);
         }
 
+        public void RemoveGameEventState(string gameId)
+        {
+            _gameEvents.TryRemove(gameId, out _);
+        }
     }
 }

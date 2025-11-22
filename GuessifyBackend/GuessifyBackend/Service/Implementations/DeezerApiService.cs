@@ -1,11 +1,12 @@
 ﻿using GuessifyBackend.DTO.DeezerResponse;
+using GuessifyBackend.Service.Interfaces;
 using GuessifyBackend.Utils.Converters;
 using System.Text.Json;
 
 
-namespace GuessifyBackend.Service
+namespace GuessifyBackend.Service.Implementations
 {
-    public class DeezerApiService
+    public class DeezerApiService : IDeezerApiService
     {
         static HttpClient client = new HttpClient();
 
@@ -22,7 +23,6 @@ namespace GuessifyBackend.Service
             string path = $"https://api.deezer.com/artist/{artistId}/albums";
             HttpResponseMessage response;
             MinimalAlbumListResponse? albumsList = null;
-            //Console.WriteLine("GET ALBUM LIST " + response.StatusCode + " ARTIST_ID " + artistId);
             int retryCount = 3;
             bool success = false;
             while (retryCount > 0 && !success)

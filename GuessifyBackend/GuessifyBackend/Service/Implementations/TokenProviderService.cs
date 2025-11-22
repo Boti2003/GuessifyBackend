@@ -1,5 +1,6 @@
 ﻿using GuessifyBackend.DTO.AuthDto;
 using GuessifyBackend.Entities.Identity;
+using GuessifyBackend.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -8,9 +9,9 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace GuessifyBackend.Service
+namespace GuessifyBackend.Service.Implementations
 {
-    public class TokenProviderService
+    public class TokenProviderService : ITokenProviderService
     {
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _dbContext;
@@ -77,7 +78,7 @@ namespace GuessifyBackend.Service
             do
             {
                 newToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
-                notExistingToken = (await _dbContext.RefreshTokens.FirstOrDefaultAsync(t => t.Token == newToken)) == null;
+                notExistingToken = await _dbContext.RefreshTokens.FirstOrDefaultAsync(t => t.Token == newToken) == null;
 
             } while (!notExistingToken);
 

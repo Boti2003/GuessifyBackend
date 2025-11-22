@@ -1,15 +1,16 @@
 ﻿using GuessifyBackend.Entities;
+using GuessifyBackend.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace GuessifyBackend.Service
+namespace GuessifyBackend.Service.Implementations
 {
-    public class QuestionService
+    public class QuestionService : IQuestionService
     {
         private readonly GameDbContext _dbContext;
 
-        private readonly DeezerApiService _deezerApiService;
+        private readonly IDeezerApiService _deezerApiService;
 
-        public QuestionService(GameDbContext gameDbContext, DeezerApiService deezerApiService)
+        public QuestionService(GameDbContext gameDbContext, IDeezerApiService deezerApiService)
         {
             _dbContext = gameDbContext;
             _deezerApiService = deezerApiService;
@@ -74,6 +75,17 @@ namespace GuessifyBackend.Service
                 throw new ArgumentException("Question not found");
             }
             question.SendTime = sendDate;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task SetEndDateForQuestion(string questionId, DateTime endDate)
+        {
+            var question = await _dbContext.Questions.FirstOrDefaultAsync(q => q.Id == Guid.Parse(questionId));
+            if (question == null)
+            {
+                throw new ArgumentException("Question not found");
+            }
+            question.EndTime = endDate;
             await _dbContext.SaveChangesAsync();
         }
     }
