@@ -42,6 +42,7 @@ namespace GuessifyBackend.Controllers
             {
                 return Results.Ok(tokens);
             }
+
             return Results.Unauthorized();
         }
 

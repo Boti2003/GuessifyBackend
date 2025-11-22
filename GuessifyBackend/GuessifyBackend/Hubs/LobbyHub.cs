@@ -21,12 +21,13 @@ namespace GuessifyBackend.Hubs
         {
             var isGuest = Context.User?.FindFirst(ClaimTypes.Anonymous)?.Value != null;
             string? userId = null;
+            string? userName = null;
             if (!isGuest)
             {
-
+                userName = Context.User?.FindFirst(ClaimTypes.Name)?.Value;
                 userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             }
-            var lobby = _lobbyService.CreateLobby(lobbyName, capacity, Context.ConnectionId, gameMode, totalRoundCount, userId);
+            var lobby = _lobbyService.CreateLobby(lobbyName, capacity, Context.ConnectionId, gameMode, totalRoundCount, userId, userName);
             Console.WriteLine(lobby.Id);
             var lobbies = _lobbyService.GetLobbies();
             await Groups.AddToGroupAsync(Context.ConnectionId, lobby.Id);

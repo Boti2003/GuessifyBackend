@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Quartz;
+using Serilog;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -37,6 +38,8 @@ namespace GuessifyBackend
             builder.Services.AddScoped<UserService>();
             builder.Services.AddSingleton<GameEventManager>();
             builder.Services.AddSingleton<VotingService>();
+            builder.Services.AddProblemDetails();
+            builder.Host.UseSerilog();
             builder.Services.AddQuartz(q =>
             {
                 // Just use the name of your job that you created in the Jobs folder.
@@ -93,10 +96,7 @@ namespace GuessifyBackend
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    /*ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,*/
+
                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
                     ValidAudience = builder.Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
@@ -163,7 +163,43 @@ namespace GuessifyBackend
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
             }
+            /*app.UseExceptionHandler(exceptionHandlerApp =>
+            {
+                exceptionHandlerApp.Run(async context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    var exceptionHandlerPathFeature =
+                        context.Features.Get<IExceptionHandlerPathFeature>();
+                    Console.WriteLine(exceptionHandlerPathFeature?.Error);
+                    if (exceptionHandlerPathFeature?.Error != null)
+                    {
+                        var errorResponse = new
+                        {
+                            Message = "An unexpected error occurred."
+
+                        };
+                        await context.Response.WriteAsJsonAsync(errorResponse);
+                    }
+                });
+            });*/
+
+            app.UseExceptionHandler(exceptionHandlerApp =>
+            {
+                exceptionHandlerApp.Run(async httpContext =>
+                {
+                    var pds = httpContext.RequestServices.GetService<IProblemDetailsService>();
+
+                    if (pds == null
+                        || !await pds.TryWriteAsync(new() { HttpContext = httpContext }))
+                    {
+
+                        await httpContext.Response.WriteAsync("Fallback: An error occurred.");
+                    }
+                });
+            });
             app.UseCors();
             app.UseHttpsRedirection();
             app.UseAuthentication();

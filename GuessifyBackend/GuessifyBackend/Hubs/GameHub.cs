@@ -45,7 +45,6 @@ namespace GuessifyBackend.Hubs
             {
                 game = await _gameService.StartNewGame(gameName, startTime, gameMode, totalRoundCount);
             }
-            Console.WriteLine(game.Id + " " + game.Name + " " + game.Mode);
             return game;
         }
 
@@ -78,29 +77,17 @@ namespace GuessifyBackend.Hubs
 
             return Task.CompletedTask;
 
-            /*var gameStatus = await _gameService.StartNewRound(gameId, categoryId);
-            if (gameStatus == GameStatus.IN_GAME)
-            {
-                await Clients.Group(gameId).ReceiveEndGameRound();
-            }
-            else if (gameStatus == GameStatus.FINISHED)
-            {
-                await Clients.Group(gameId).ReceiveGameEnd(new GameEndDto(GameEndReason.ALL_ROUNDS_COMPLETED));
-            }*/
-
 
         }
 
-        //TODO: RegisterVote
 
         public async Task RegisterVote(string gameId, string categoryId)
         {
-            Console.WriteLine($"Registering vote for game {gameId} and category {categoryId}");
             var playerCount = await _gameService.GetPlayerCountInGame(gameId);
             _votingService.RegisterVote(gameId, categoryId, playerCount);
         }
 
-        //TODO: handleRemoteGame
+
 
         public Task ManageRemoteGame(string gameId)
         {
@@ -114,7 +101,6 @@ namespace GuessifyBackend.Hubs
                 }
 
             });
-            //await _gameService.ManageRemoteGamePlay(gameId);
             return Task.CompletedTask;
         }
 

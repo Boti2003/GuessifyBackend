@@ -14,6 +14,8 @@ namespace GuessifyBackend.Models
         public string HostConnectionId { get; set; } = null!;
 
         public string? HostUserId { get; set; }
+
+        public string? HostUserName { get; set; }
         public int TotalRoundCount { get; set; }
         public GameMode GameMode { get; set; }
         public string? ConnectionCode { get; set; }

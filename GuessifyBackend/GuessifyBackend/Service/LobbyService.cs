@@ -18,7 +18,7 @@ namespace GuessifyBackend.Service
             _lobbies = new List<Lobby>();
         }
 
-        public LobbyDto CreateLobby(string name, int capacity, string connectionId, GameMode gameMode, int totalRoundCount, string? userId)
+        public LobbyDto CreateLobby(string name, int capacity, string connectionId, GameMode gameMode, int totalRoundCount, string? userId, string? userName)
         {
             string? connectionCode = null;
             int currentPlayerCount = 0;
@@ -60,7 +60,8 @@ namespace GuessifyBackend.Service
                 GameMode = gameMode,
                 ConnectionCode = connectionCode,
                 TotalRoundCount = totalRoundCount,
-                HostUserId = userId
+                HostUserId = userId,
+                HostUserName = userName
             };
             _lobbies.Add(lobby);
             return new LobbyDto(lobby.Id, lobby.Name, lobby.CurrentPlayerCount, lobby.Capacity, lobby.Status, lobby.GameMode, lobby.TotalRoundCount, lobby.ConnectionCode);
@@ -73,6 +74,8 @@ namespace GuessifyBackend.Service
                 return new JoinStatusDto(null, JoinStatus.LOBBY_NOT_FOUND, null);
             else if (lobby.CurrentPlayerCount >= lobby.Capacity)
                 return new JoinStatusDto(null, JoinStatus.LOBBY_FULL, null);
+            else if (lobby.Players.Any(p => p.Name == playerName))
+                return new JoinStatusDto(null, JoinStatus.USERNAME_TAKEN, null);
             else
             {
                 if (userId != null)
@@ -134,6 +137,8 @@ namespace GuessifyBackend.Service
             };
             if (lobby.Capacity <= lobby.CurrentPlayerCount)
                 return new JoinStatusDto(null, JoinStatus.LOBBY_FULL, null);
+            if (lobby.Players.Any(p => p.Name == playerName) || lobby.HostUserName == playerName)
+                return new JoinStatusDto(null, JoinStatus.USERNAME_TAKEN, null);
             lobby.Players.Add(newPlayer);
             lobby.CurrentPlayerCount += 1;
             var lobbies = this.GetLobbies();
