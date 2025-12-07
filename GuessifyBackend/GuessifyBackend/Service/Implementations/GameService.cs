@@ -167,7 +167,7 @@ namespace GuessifyBackend.Service.Implementations
         public async Task ManageRemoteGamePlay(string gameId)
         {
 
-            Console.WriteLine("Managing remote game play for game: " + gameId);
+
             GameStatus gameStatus = GameStatus.IN_GAME;
             while (gameStatus == GameStatus.IN_GAME)
             {
@@ -188,7 +188,7 @@ namespace GuessifyBackend.Service.Implementations
 
                 await Task.WhenAny(tcs.Task, Task.Delay(voteTime));
 
-                _eventManager.UnsubscribeFromEvent(gameId, handler, EventType.EVERYONE_VOTED); //refactor event handling, shall be game level for all gamemode -> everyone voted as well
+                _eventManager.UnsubscribeFromEvent(gameId, handler, EventType.EVERYONE_VOTED);
 
                 var categoryId = _votingService.GetWinningCategory(gameId);
                 if (categoryId == null)
@@ -204,7 +204,7 @@ namespace GuessifyBackend.Service.Implementations
             }
 
 
-            //status finsihed either returned or sent by hub - shall be checking aborted game logic, but that should be basically fine
+
         }
 
         public async Task DistributePointsBetweenPlayers(string questionId)

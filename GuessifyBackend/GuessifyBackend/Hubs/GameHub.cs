@@ -109,9 +109,30 @@ namespace GuessifyBackend.Hubs
             return Task.CompletedTask;
         }
 
-        public override async Task OnDisconnectedAsync(Exception? exception)
+        public override Task OnDisconnectedAsync(Exception? exception)
         {
-            await _gameService.ManageLeaveGame(Context.ConnectionId);
+            var connectionId = Context.ConnectionId;
+            Task.Run(async () =>
+            {
+                try
+                {
+
+                    using (var scope = _serviceFactory.CreateScope())
+                    {
+                        var _scopedGameService = scope.ServiceProvider.GetRequiredService<IGameService>();
+                        await _scopedGameService.ManageLeaveGame(connectionId);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error in Leavegame: " + ex.Message);
+                    throw;
+                }
+
+
+            });
+            return base.OnDisconnectedAsync(exception);
+
         }
 
 

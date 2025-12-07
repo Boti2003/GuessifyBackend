@@ -38,13 +38,12 @@ namespace GuessifyBackend.Service.Implementations
 
         public async Task<UserProfileDto?> GetUserProfile(string userId)
         {
-
             var users = await _userManager.Users.OrderByDescending(u => u.ScoreSum).ThenBy(u => u.DisplayName).
                Select(u => new { u.Id, u.DisplayName, u.ScoreSum }).ToListAsync();
             var user = users.Select((u, index) => new { u.Id, u.DisplayName, u.ScoreSum, Rank = index + 1 }).
                 FirstOrDefault(u => u.Id == userId);
 
-            if (user == null) return null;
+            if (user == null) throw new ArgumentException("User cannot be found.");
             var userProfile = new UserProfileDto(user.DisplayName!, user.ScoreSum, user.Rank);
             return userProfile;
         }

@@ -1,6 +1,7 @@
 
 using GuessifyBackend.Entities;
 using GuessifyBackend.Entities.Identity;
+using GuessifyBackend.Handlers;
 using GuessifyBackend.Hubs;
 using GuessifyBackend.Jobs;
 using GuessifyBackend.Service.Implementations;
@@ -19,6 +20,19 @@ namespace GuessifyBackend
     {
         public static void Main(string[] args)
         {
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File(
+                    "Logs/log.txt",
+                   rollingInterval: RollingInterval.Day,
+                   fileSizeLimitBytes: 10 * 1024 * 1024,
+                   rollOnFileSizeLimit: true,
+                   shared: true,
+                   flushToDiskInterval: TimeSpan.FromSeconds(1))
+                .CreateLogger();
+            Log.Information("Starting Guessify Server");
+
 
             var builder = WebApplication.CreateBuilder(args);
 
@@ -39,8 +53,9 @@ namespace GuessifyBackend
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddSingleton<IGameEventManager, GameEventManager>();
             builder.Services.AddSingleton<IVotingService, VotingService>();
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddProblemDetails();
-            builder.Host.UseSerilog();
+            builder.Services.AddSerilog();
             builder.Services.AddQuartz(q =>
             {
                 // Just use the name of your job that you created in the Jobs folder.
@@ -73,8 +88,6 @@ namespace GuessifyBackend
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            /*builder.Services.AddAuthentication()
-                .AddBearerToken(IdentityConstants.BearerScheme);*/
 
 
             builder.Services.AddAuthentication(options =>
@@ -166,41 +179,8 @@ namespace GuessifyBackend
                 app.UseSwaggerUI();
 
             }
-            /*app.UseExceptionHandler(exceptionHandlerApp =>
-            {
-                exceptionHandlerApp.Run(async context =>
-                {
-                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                    context.Response.ContentType = "application/json";
-                    var exceptionHandlerPathFeature =
-                        context.Features.Get<IExceptionHandlerPathFeature>();
-                    Console.WriteLine(exceptionHandlerPathFeature?.Error);
-                    if (exceptionHandlerPathFeature?.Error != null)
-                    {
-                        var errorResponse = new
-                        {
-                            Message = "An unexpected error occurred."
 
-                        };
-                        await context.Response.WriteAsJsonAsync(errorResponse);
-                    }
-                });
-            });*/
-
-            /*app.UseExceptionHandler(exceptionHandlerApp =>
-            {
-                exceptionHandlerApp.Run(async httpContext =>
-                {
-                    var pds = httpContext.RequestServices.GetService<IProblemDetailsService>();
-
-                    if (pds == null
-                        || !await pds.TryWriteAsync(new() { HttpContext = httpContext }))
-                    {
-
-                        await httpContext.Response.WriteAsync("Fallback: An error occurred.");
-                    }
-                });
-            });*/
+            app.UseExceptionHandler();
             app.UseCors();
             app.UseHttpsRedirection();
             app.UseAuthentication();
