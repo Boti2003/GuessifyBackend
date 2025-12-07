@@ -13,17 +13,28 @@ namespace GuessifyBackend.Service.Implementations
 
         private IHubContext<LobbyHub, IlobbyClient> _lobbyHubContext;
 
-        public LobbyService(IHubContext<LobbyHub, IlobbyClient> lobbyhub)
+        private IServiceProvider _serviceScopeFactory;
+
+        public LobbyService(IHubContext<LobbyHub, IlobbyClient> lobbyhub, IServiceProvider serviceFactory)
         {
             _lobbyHubContext = lobbyhub;
             _lobbies = new List<Lobby>();
+            _serviceScopeFactory = serviceFactory;
         }
 
-        public async Task<LobbyDto> CreateLobby(string name, int capacity, string connectionId, GameMode gameMode, int totalRoundCount, string? userId, string? userName)
+        public async Task<CreateLobbyDto> CreateLobby(string name, int capacity, string connectionId, GameMode gameMode, int totalRoundCount, string? userId, string? userName)
         {
             string? connectionCode = null;
             int currentPlayerCount = 0;
-            if (gameMode == GameMode.LOCAL)
+            if (gameMode == GameMode.REMOTE)
+            {
+                currentPlayerCount = 1;
+                if (_lobbies.Any(l => l.Name == name && l.GameMode == GameMode.REMOTE))
+                {
+                    return new CreateLobbyDto(LobbyCreateStatus.LOBBY_ALREADY_EXISTS_WITH_NAME, null);
+                }
+            }
+            else if (gameMode == GameMode.LOCAL)
             {
                 char[] _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
                 Random rand = new();
@@ -43,10 +54,6 @@ namespace GuessifyBackend.Service.Implementations
                 } while (existingCodes.Contains(connectionCode));
 
 
-            }
-            else if (gameMode == GameMode.REMOTE)
-            {
-                currentPlayerCount = 1;
             }
 
             Lobby lobby = new Lobby
@@ -69,7 +76,7 @@ namespace GuessifyBackend.Service.Implementations
             var lobbies = GetLobbies();
             await _lobbyHubContext.Groups.AddToGroupAsync(connectionId, lobby.Id);
             await _lobbyHubContext.Clients.All.ReceiveLobbies(lobbies);
-            return new LobbyDto(lobby.Id, lobby.Name, lobby.CurrentPlayerCount, lobby.Capacity, lobby.Status, lobby.GameMode, lobby.TotalRoundCount, lobby.ConnectionCode);
+            return new CreateLobbyDto(LobbyCreateStatus.CREATED, new LobbyDto(lobby.Id, lobby.Name, lobby.CurrentPlayerCount, lobby.Capacity, lobby.Status, lobby.GameMode, lobby.TotalRoundCount, lobby.ConnectionCode));
         }
 
         public async Task<JoinStatusDto> JoinLobbyWithCode(string code, string playerName, string connectionId, string? userId)
@@ -105,11 +112,13 @@ namespace GuessifyBackend.Service.Implementations
                     UserId = userId,
                 };
                 lobby.Players.Add(newPlayer);
+                lobby.CurrentPlayerCount += 1;
 
                 var lobbies = GetLobbies();
 
                 var players = GetPlayersInLobby(lobby.Id);
                 await _lobbyHubContext.Groups.AddToGroupAsync(connectionId, lobby.Id);
+                await _lobbyHubContext.Clients.Group(lobby.Id).ReceivePlayersInLobby(players);
                 await _lobbyHubContext.Clients.All.ReceiveLobbies(lobbies);
                 return new JoinStatusDto(new PlayerDto(newPlayer.Id, newPlayer.Name, newPlayer.Score), JoinStatus.SUCCESS, lobby.Id);
             }
@@ -150,9 +159,22 @@ namespace GuessifyBackend.Service.Implementations
             var players = GetPlayersInLobby(lobbyId);
 
             await _lobbyHubContext.Groups.AddToGroupAsync(connectionId, lobbyId);
+            await _lobbyHubContext.Clients.Group(lobby.Id).ReceivePlayersInLobby(players);
             await _lobbyHubContext.Clients.All.ReceiveLobbies(lobbies);
             return new JoinStatusDto(new PlayerDto(newPlayer.Id, newPlayer.Name, newPlayer.Score), JoinStatus.SUCCESS, null);
 
+        }
+
+        public async Task AbandonLobby(string lobbyId, string gameId)
+        {
+            using IServiceScope serviceScope = _serviceScopeFactory.CreateScope();
+            var _gameServiceInstance = serviceScope.ServiceProvider.GetRequiredService<IGameService>();
+            var game = await _gameServiceInstance.GetGame(gameId);
+            var lobby = _lobbies.Single(lobby => lobby.Id == lobbyId);
+            await _lobbyHubContext.Clients.Groups(lobbyId).RequestConnectionToGame(game);
+            await RemoveLobby(lobbyId);
+
+            await _lobbyHubContext.Clients.All.ReceiveLobbies(this.GetLobbies());
         }
         public List<LobbyDto> GetLobbies()
         {
@@ -185,7 +207,7 @@ namespace GuessifyBackend.Service.Implementations
             if (lobby != null)
             {
                 await _lobbyHubContext.Clients.Group(lobby.Id).ReceiveHostDisconnectedFromLobby();
-                _lobbies.Remove(lobby);
+                await RemoveLobby(lobby.Id);
                 var remainingLobbiesDto = GetLobbies();
                 await _lobbyHubContext.Clients.All.ReceiveLobbies(remainingLobbiesDto);
                 return;
@@ -198,6 +220,7 @@ namespace GuessifyBackend.Service.Implementations
                     l.Players.Remove(player);
                     var lobbiesDto = GetLobbies();
                     var players = GetPlayersInLobby(l.Id);
+                    await _lobbyHubContext.Groups.RemoveFromGroupAsync(connectionId, l.Id);
                     await _lobbyHubContext.Clients.All.ReceiveLobbies(lobbiesDto);
                     await _lobbyHubContext.Clients.Group(l.Id).ReceivePlayersInLobby(players);
                     return;
@@ -207,9 +230,11 @@ namespace GuessifyBackend.Service.Implementations
 
         }
 
-        public void RemoveLobby(string lobbyId)
+        private async Task RemoveLobby(string lobbyId)
         {
+            await RemoveAllPlayersFromLobbyGroup(lobbyId);
             _lobbies.RemoveAll(p => p.Id == lobbyId);
+
         }
 
         public List<PlayerDto> GetPlayersInLobby(string lobbyId)
@@ -223,6 +248,30 @@ namespace GuessifyBackend.Service.Implementations
                 playerDtos.Add(new PlayerDto(player.Id, player.Name, player.Score));
             }
             return playerDtos;
+        }
+
+        public StartGameStatus CheckWhetherGameCanBeStarted(string lobbyId, string? hostPlayerName)
+        {
+            var lobby = _lobbies.Single(lobby => lobby.Id == lobbyId);
+            if (lobby.CurrentPlayerCount < 2)
+            {
+                return StartGameStatus.NOT_ENOUGH_PLAYERS;
+            }
+            if (hostPlayerName != null && lobby.Players.Any(p => p.Name == hostPlayerName))
+            {
+                return StartGameStatus.HOST_PLAYER_NAME_TAKEN;
+            }
+            return StartGameStatus.GAME_CAN_BE_STARTED;
+        }
+
+        private async Task RemoveAllPlayersFromLobbyGroup(string lobbyId)
+        {
+            var lobby = _lobbies.Single(lobby => lobby.Id == lobbyId);
+            foreach (var player in lobby.Players)
+            {
+                await _lobbyHubContext.Groups.RemoveFromGroupAsync(player.ConnectionId, lobbyId);
+            }
+            await _lobbyHubContext.Groups.RemoveFromGroupAsync(lobby.HostConnectionId, lobbyId);
         }
     }
 }

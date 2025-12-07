@@ -13,7 +13,6 @@ namespace GuessifyBackend.Service.Interfaces
         Task<GameStatus> StartNewRound(string gameId, string categoryId);
         Task ManageRemoteGamePlay(string gameId);
         Task DistributePointsBetweenPlayers(string questionId);
-        Task<List<QuestionDto>> GetQuestionsInGameRound(string gameRoundId);
         Task RegisterAnswer(string gameId, string gameRoundId, string questionId, string answer, string playerId, DateTime time);
         Task<GameStatus> PlayGameRound(string gameId, GameRoundDto gameRound);
         Task<GameDto> GetGame(string gameId);

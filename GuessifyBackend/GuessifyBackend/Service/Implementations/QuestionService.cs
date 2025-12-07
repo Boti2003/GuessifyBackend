@@ -1,4 +1,5 @@
-﻿using GuessifyBackend.Entities;
+﻿using GuessifyBackend.DTO.GameModel;
+using GuessifyBackend.Entities;
 using GuessifyBackend.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,33 +39,50 @@ namespace GuessifyBackend.Service.Implementations
                 {
                     var titlesWithoutAnswer = titles.Where(t => t != song.Title).ToArray();
                     pickSongs.Shuffle(titlesWithoutAnswer);
-                    var options = titlesWithoutAnswer.Take(4).ToArray();
-                    options[3] = song.Title;
-                    pickSongs.Shuffle(options);
+                    var options = titlesWithoutAnswer.Take(3).ToList();
+                    var allOptions = options.Append(song.Title).ToArray();
+                    pickSongs.Shuffle(allOptions);
                     questions.Add(new Question
                     {
-                        AnswerOptions = options.ToList(),
+                        AnswerOptions = allOptions.ToList(),
                         CorrectAnswer = song.Title,
-                        SongId = song.Id.ToString(),
+                        Song = song,
                     });
                 }
                 else
                 {
                     var artistsWithoutAnswer = artists.Where(a => a != song.Artist).ToArray();
                     pickSongs.Shuffle(artistsWithoutAnswer);
-                    var options = artistsWithoutAnswer.Take(4).ToArray();
-                    options[3] = song.Artist;
+                    var options = artistsWithoutAnswer.Take(3).ToArray();
+                    var allOptions = options.Append(song.Artist).ToArray();
+                    pickSongs.Shuffle(allOptions);
                     questions.Add(new Question
                     {
-                        AnswerOptions = options.ToList(),
+                        AnswerOptions = allOptions.ToList(),
                         CorrectAnswer = song.Artist,
-                        SongId = song.Id.ToString(),
+                        Song = song,
                     });
                 }
 
             }
             return questions;
 
+        }
+
+        public async Task<List<QuestionDto>> FormatQuestionsForGameRound(List<Question> questions)
+        {
+
+            List<QuestionDto> questionDtos = new List<QuestionDto>();
+            foreach (var question in questions)
+            {
+                var url = await _deezerApiService.GetPreviewUrlOfTrack(question.Song.DeezerId);
+                if (url == null)
+                {
+                    throw new ArgumentException("Preview URL not found for track");
+                }
+                questionDtos.Add(new QuestionDto(question.Id.ToString(), question.AnswerOptions, url));
+            }
+            return questionDtos;
         }
 
         public async Task SetSendDateForQuestion(string questionId, DateTime sendDate)

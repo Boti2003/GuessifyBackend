@@ -2,7 +2,6 @@
 using GuessifyBackend.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace GuessifyBackend.Controllers
 {
@@ -81,7 +80,6 @@ namespace GuessifyBackend.Controllers
         [Authorize]
         public async Task<IResult> Logout([FromBody] LogoutRequestDto logoutRequestDto)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             await _authService.Logout(logoutRequestDto.RefreshToken);
             return Results.Ok(new { Message = "User logged out successfully." });
         }

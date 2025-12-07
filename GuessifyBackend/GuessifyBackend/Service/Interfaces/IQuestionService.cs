@@ -1,4 +1,5 @@
-﻿using GuessifyBackend.Entities;
+﻿using GuessifyBackend.DTO.GameModel;
+using GuessifyBackend.Entities;
 
 namespace GuessifyBackend.Service.Interfaces
 {
@@ -8,5 +9,7 @@ namespace GuessifyBackend.Service.Interfaces
         Task SetSendDateForQuestion(string questionId, DateTime sendDate);
 
         Task SetEndDateForQuestion(string questionId, DateTime endDate);
+
+        Task<List<QuestionDto>> FormatQuestionsForGameRound(List<Question> questions);
     }
 }

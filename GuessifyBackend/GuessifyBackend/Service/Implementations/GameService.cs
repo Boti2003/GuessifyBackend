@@ -90,6 +90,7 @@ namespace GuessifyBackend.Service.Implementations
                 Score = 0,
                 ConnectionId = connectionId,
                 UserId = userId,
+
                 IsGuest = isGuest,
 
             };
@@ -133,7 +134,7 @@ namespace GuessifyBackend.Service.Implementations
             var newRound = new GameRound
             {
                 StartTime = DateTime.Now,
-                GameCategoryId = category.Id,
+                GameCategoryId = new Guid(categoryId),
                 Questions = questions,
                 Answers = new List<PlayerAnswer>(),
 
@@ -142,21 +143,20 @@ namespace GuessifyBackend.Service.Implementations
             await _dbContext.SaveChangesAsync();
 
 
-            var status = await PlayGameRound(gameId, new GameRoundDto(newRound.Id.ToString(), newRound.GameCategoryId, category.Name));
+            var status = await PlayGameRound(gameId, new GameRoundDto(newRound.Id.ToString(), newRound.GameCategoryId.ToString(), category.Name));
             if (status == GameStatus.ABORTED)
             {
-                await EndGame(gameId);
+                await EndGame(gameId, status);
                 return status;
             }
             if (game.GameRounds.Count >= game.TotalRoundCount)
             {
                 Console.WriteLine(game.GameRounds.Count);
-                game.Status = GameStatus.FINISHED;
-                await EndGame(gameId);
-                await _dbContext.SaveChangesAsync();
                 await _gameHubContext.Clients.Group(gameId).ReceiveGameEnd(new GameEndDto(GameEndReason.ALL_ROUNDS_COMPLETED));
+                await EndGame(gameId, status);
                 return GameStatus.FINISHED;
             }
+
             int roundCount = game.GameRounds.Count;
 
             await _gameHubContext.Clients.Group(gameId).ReceiveEndGameRound(roundCount + 1);
@@ -210,47 +210,29 @@ namespace GuessifyBackend.Service.Implementations
         public async Task DistributePointsBetweenPlayers(string questionId)
         {
             var answers = await _dbContext.PlayerAnswers
-                .Where(a => a.QuestionId == questionId)
+                .Include(a => a.Player)
+                .Include(a => a.Question)
+                .Where(a => a.Question.Id == Guid.Parse(questionId))
                 .ToListAsync();
             var correctPlayerIds = answers.Where(a => a.IsCorrect).OrderBy(a => a.AnswerTimeInMilliseconds)
-                .Select(a => a.PlayerId).ToList();
+                .Select(a => a.Player.Id).ToList();
             for (int i = 0; i < correctPlayerIds.Count; i++)
             {
                 var points = Math.Max(100 - i * 10, 50);
-                answers.First(a => a.PlayerId == correctPlayerIds[i]).PointsAwarded = points;
-                var player = await _dbContext.Players.FirstOrDefaultAsync(p => p.Id.ToString() == correctPlayerIds[i]);
-                if (player != null) { player.Score += points; }
+                var answer = answers.Single(a => a.Player.Id == correctPlayerIds[i]);
+                answer.PointsAwarded = points;
+                var player = answer.Player;
+                player.Score += points;
             }
             await _dbContext.SaveChangesAsync();
 
-        }
-
-        public async Task<List<QuestionDto>> GetQuestionsInGameRound(string gameRoundId)
-        {
-            var gameRound = await _dbContext.GameRounds
-                .Include(gr => gr.Questions)
-                .SingleAsync(gr => gr.Id == Guid.Parse(gameRoundId));
-            var questions = gameRound.Questions;
-            List<QuestionDto> questionDtos = new List<QuestionDto>();
-            foreach (var question in questions)
-            {
-                Console.WriteLine(question.CorrectAnswer);
-                var song = await _dbContext.Songs.SingleAsync(t => t.Id.ToString() == question.SongId);
-                var url = await _deezerApiService.GetPreviewUrlOfTrack(song.DeezerId);
-                if (url == null)
-                {
-                    throw new ArgumentException("Preview URL not found for track");
-                }
-                questionDtos.Add(new QuestionDto(question.Id.ToString(), question.AnswerOptions, url));
-            }
-            return questionDtos;
         }
 
         public async Task RegisterAnswer(string gameId, string gameRoundId, string questionId, string answer, string playerId, DateTime time)
         {
             var gameRound = await _dbContext.GameRounds
                 .Include(gr => gr.Questions)
-                .Include(gr => gr.Answers)
+                .Include(gr => gr.Answers).ThenInclude(gra => gra.Question)
                 .FirstOrDefaultAsync(gr => gr.Id == Guid.Parse(gameRoundId));
             if (gameRound == null)
             {
@@ -267,20 +249,21 @@ namespace GuessifyBackend.Service.Implementations
             {
                 throw new ArgumentException("Answer time exceeded");
             }
+
             var playerAnswer = new PlayerAnswer
             {
-                QuestionId = question.Id.ToString(),
-                PlayerId = playerId,
                 SelectedAnswer = answer,
                 IsCorrect = question.CorrectAnswer == answer,
                 AnswerTimeInMilliseconds = (int)elapsedTime,
+                PlayerId = new Guid(playerId),
+                Question = question,
             };
             gameRound.Answers.Add(playerAnswer);
             await _dbContext.SaveChangesAsync();
 
             var playerCount = await GetPlayerCountInGame(gameId);
             Console.WriteLine("Players: " + gameRound.Answers.Count + " " + playerCount);
-            if (gameRound.Answers.FindAll(gr => gr.QuestionId.ToString() == question.Id.ToString()).Count >= playerCount)
+            if (gameRound.Answers.Count(gra => gra.QuestionId == question.Id) >= playerCount)
             {
                 Console.WriteLine("All players answered: " + gameRound.Answers.Count + playerCount);
                 _eventManager.RaiseEventOfGame(gameId, EventType.EVERYONE_ANSWERED);
@@ -291,8 +274,11 @@ namespace GuessifyBackend.Service.Implementations
         {
 
             await _gameHubContext.Clients.Group(gameId).ReceiveNewRoundStarted(gameRound);
-            var questions = await GetQuestionsInGameRound(gameRound.Id);
-            foreach (var question in questions)
+            var gameDbRound = await _dbContext.GameRounds
+                .Include(gr => gr.Questions).ThenInclude(q => q.Song)
+                .SingleAsync(gr => gr.Id == Guid.Parse(gameRound.Id));
+            var questionDtos = await _questionService.FormatQuestionsForGameRound(gameDbRound.Questions);
+            foreach (var question in questionDtos)
             {
                 var game = await _dbContext.Games.
                     AsNoTracking().
@@ -400,18 +386,28 @@ namespace GuessifyBackend.Service.Implementations
             }
         }
 
-        private async Task EndGame(string gameId)
+        private async Task EndGame(string gameId, GameStatus gameStatus)
         {
             var game = await _dbContext.Games.Include(g => g.Players).FirstOrDefaultAsync(g => g.Id == Guid.Parse(gameId));
             if (game == null)
                 throw new ArgumentException("Game is not found");
             foreach (var player in game.Players)
             {
+                await _gameHubContext.Groups.RemoveFromGroupAsync(player.ConnectionId, gameId);
                 if (!player.IsGuest && player.UserId != null)
                 {
                     await _userService.CalculateSumScoresForUser(player.UserId);
                 }
             }
+            if (game.Mode == GameMode.LOCAL && game.HostConnectionId != null)
+            {
+                await _gameHubContext.Groups.RemoveFromGroupAsync(game.HostConnectionId, gameId);
+            }
+            if (gameStatus == GameStatus.FINISHED)
+            {
+                game.Status = gameStatus;
+            }
+
             game.EndTime = DateTime.Now;
             _votingService.RemoveVoteSummaryForGame(gameId);
             _eventManager.RemoveGameEventState(gameId);

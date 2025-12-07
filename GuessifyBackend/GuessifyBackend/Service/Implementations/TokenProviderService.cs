@@ -85,7 +85,7 @@ namespace GuessifyBackend.Service.Implementations
             var refreshToken = new RefreshToken
             {
                 Token = newToken,
-                UserId = user.Id,
+                User = user,
                 ExpiryDate = DateTime.UtcNow.AddDays(7),
                 IsRevoked = false
             };
@@ -98,13 +98,13 @@ namespace GuessifyBackend.Service.Implementations
 
         public async Task<TokensDto?> RefreshTokens(string refreshToken)
         {
-            var token = _dbContext.RefreshTokens.Single(t => t.Token == refreshToken);
-            var user = await _userManager.FindByIdAsync(token.UserId);
-            if (token == null || token.IsRevoked || token.ExpiryDate <= DateTime.UtcNow || user == null)
+            var token = await _dbContext.RefreshTokens.Include(rt => rt.User).SingleAsync(t => t.Token == refreshToken);
+
+            if (token == null || token.IsRevoked || token.ExpiryDate <= DateTime.UtcNow || token.User == null)
             {
                 return null;
             }
-            var tokens = await GenerateTokensForUser(user);
+            var tokens = await GenerateTokensForUser(token.User);
             token.IsRevoked = true;
             await _dbContext.SaveChangesAsync();
             return tokens;

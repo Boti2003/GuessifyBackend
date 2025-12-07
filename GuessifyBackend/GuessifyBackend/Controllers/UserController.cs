@@ -16,7 +16,7 @@ namespace GuessifyBackend.Controllers
             _userService = userService;
         }
 
-        [HttpGet("me")]
+        [HttpGet("Me")]
         [Authorize]
         public async Task<IResult> GetCurrentUser()
         {
@@ -30,7 +30,7 @@ namespace GuessifyBackend.Controllers
             return Results.Ok(user);
         }
 
-        [HttpGet("scores")]
+        [HttpGet("Scores")]
         [Authorize]
         public async Task<IResult> GetScoresForUsers()
         {

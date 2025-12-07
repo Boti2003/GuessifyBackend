@@ -12,8 +12,12 @@ namespace GuessifyBackend.Entities
         public List<string> AnswerOptions { get; set; } = null!;
         public DateTime SendTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public string SongId { get; set; } = null!;
         public string CorrectAnswer { get; set; } = null!;
+
+        public Guid SongId { get; set; }
+        [ForeignKey("SongId")]
+        public virtual Song Song { get; set; } = null!;
+
 
     }
 }

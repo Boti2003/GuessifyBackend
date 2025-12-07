@@ -18,6 +18,7 @@ namespace GuessifyBackend.Jobs
         {
             try
             {
+                Console.WriteLine("Starting MusicDbSetupJob...");
                 var setup = await _setupConfigService.ParseConfigData("setup_game.json");
                 if (setup == null)
                 {

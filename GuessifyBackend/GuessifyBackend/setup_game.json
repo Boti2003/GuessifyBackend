@@ -68,10 +68,294 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Rock",
+      "categories": [
+        {
+          "name": "Classic Rock",
+          "artists": [
+
+          ],
+          "albums": [
+
+          ],
+          "excluded_albums": [
+
+          ]
+        },
+        {
+          "name": "Hard Rock",
+          "artists": [
+
+          ],
+          "albums": [],
+          "excluded_albums": [
+
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Hiphop",
+      "categories": [
+        {
+          "name": "New wave hiphop",
+          "artists": [
+
+          ],
+          "albums": [
+
+          ],
+          "excluded_albums": [
+
+          ]
+        },
+        {
+          "name": "Classic rap",
+          "artists": [
+
+          ],
+          "albums": [],
+          "excluded_albums": [
+
+          ]
+        }
+      ]
     }
 
   ],
   "eraGroups": [
+    {
+      "name": "70s",
+      "startYear": 1970,
+      "endYear": 1969,
+      "categories": [
+        {
+          "name": "70s Pop and Dance",
+          "artists": [
+            {
+              "name": "Neoton Família",
+              "deezerId": "458508"
+            },
+            {
+              "name": "Koncz Zsuzsa",
+              "deezerId": "4731301"
+            },
+            {
+              "name": "Máté Péter",
+              "deezerId": "4731301"
+            },
+            {
+              "name": "Cserháti Zsuzsa",
+              "deezerId": "6540"
+            },
+            {
+              "name": "Zorán",
+              "deezerId": "293519"
+            },
+            {
+              "name": "Hungária",
+              "deezerId": "263008"
+            },
+            {
+              "name": "Korda György",
+              "deezerId": "1511775"
+            }
+          ],
+          "albums": [
+
+          ],
+          "excluded_albums": [
+            {
+              "name": "Disco Party '87",
+              "artistName": "Neoton Familia",
+              "deezerId": "579469901"
+            },
+            {
+              "name": "Dreamn'B",
+              "artistName": "Zorán",
+              "deezerId": "558967962"
+            },
+            {
+              "name": "CORAZON URBANO",
+              "artistName": "Zorán",
+              "deezerId": "843533932"
+            },
+            {
+              "name": "10 év - 1 név",
+              "artistName": "Zorán",
+              "deezerId": "584892122"
+            },
+            {
+              "name": "ANTRUM AURA",
+              "artistName": "Zorán",
+              "deezerId": "458503315"
+            },
+            {
+              "name": "DUALIDAD",
+              "artistName": "Zorán",
+              "deezerId": "849913932"
+            }
+          ]
+        },
+        {
+          "name": "Rock",
+          "artists": [
+            {
+              "name": "Omega",
+              "deezerId": "82058802"
+            },
+            {
+              "name": "Piramis",
+              "deezerId": "4082"
+            },
+            {
+              "name": "Locomotiv GT (LGT)",
+              "deezerId": "2330861"
+            },
+            {
+              "name": "P. Mobil",
+              "deezerId": "6446998"
+            },
+            {
+              "name": "Karthago",
+              "deezerId": "132770"
+            }
+
+          ],
+          "albums": [],
+          "excluded_albums": [
+            {
+              "name": "The Progressive Eighties",
+              "artistName": "Omega",
+              "deezerId": "422055737"
+            },
+            {
+              "name": "Trans And Dance (remastered)",
+              "artistName": "Omega",
+              "deezerId": "657570881"
+
+            },
+            {
+              "name": "The Spacey Seventies",
+              "artistName": "Omega",
+              "deezerId": "422054647"
+            },
+            {
+              "name": "The Heavy Nineties",
+              "artistName": "Omega",
+              "deezerId": "422055677"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "80s",
+      "startYear": 1980,
+      "endYear": 1989,
+      "categories": [
+        {
+          "name": "Rock",
+          "artists": [
+            {
+              "name": "P. Mobil",
+              "deezerId": "6446998"
+            },
+            {
+              "name": "Hobo Blues Band",
+              "deezerId": "8994"
+            },
+            {
+              "name": "Edda Művek",
+              "deezerId": "65472"
+            },
+            {
+              "name": "Pokolgép",
+              "deezerId": "8689"
+            }
+          ],
+          "albums": [],
+          "excluded_albums": []
+        },
+        {
+          "name": "Pop",
+          "artists": [
+            {
+              "name": "Neoton Família",
+              "deezerId": "458508"
+            },
+            {
+              "name": "Első Emelet",
+              "deezerId": "4409219"
+            },
+            {
+              "name": "R-Go",
+              "deezerId": "281006"
+            },
+            {
+              "name": "Prognózis",
+              "deezerId": "4647035"
+            }
+          ],
+          "albums": [],
+          "excluded_albums": [
+            {
+              "name": "Disco Party '87",
+              "artistName": "Neoton Família",
+              "deezerId": "579469901"
+            }
+          ]
+        },
+        {
+          "name": "Pop-rock",
+          "artists": [
+            {
+              "name": "KFT",
+              "deezerId": "67490"
+            },
+            {
+              "name": "V'Moto-Rock",
+              "deezerId": "66661"
+            },
+            {
+              "name": "Locomotiv GT (LGT)",
+              "deezerId": "2330861"
+            }
+          ],
+          "albums": [],
+          "excluded_albums": []
+        },
+        {
+          "name": "Alternative rock",
+          "artists": [
+            {
+              "name": "Kontroll Csoport",
+              "deezerId": "1292345"
+            },
+            {
+              "name": "Bizottság (A. E. Bizottság)",
+              "deezerId": "4083"
+            },
+            {
+              "name": "Balaton",
+              "deezerId": "754645"
+            },
+            {
+              "name": "Európa Kiadó",
+              "deezerId": "5795"
+            },
+            {
+              "name": "Sziámi",
+              "deezerId": "66661"
+            }
+          ],
+          "albums": [],
+          "excluded_albums": []
+        }
+      ]
+    },
     {
       "name": "90s",
       "startYear": 1990,
@@ -105,7 +389,7 @@
             }
           ],
           "excluded_albums": [
-           
+
           ]
         }
       ]

@@ -50,7 +50,7 @@ namespace GuessifyBackend
                 q.AddTrigger(opts => opts
                     .ForJob(jobKey)
                     .WithIdentity("SetupMusicDb-trigger")
-                    .WithSchedule(CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Monday, 1, 0))
+                    .WithSchedule(CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Saturday, 22, 2))
                 );
             });
             builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
@@ -187,7 +187,7 @@ namespace GuessifyBackend
                 });
             });*/
 
-            app.UseExceptionHandler(exceptionHandlerApp =>
+            /*app.UseExceptionHandler(exceptionHandlerApp =>
             {
                 exceptionHandlerApp.Run(async httpContext =>
                 {
@@ -200,7 +200,7 @@ namespace GuessifyBackend
                         await httpContext.Response.WriteAsync("Fallback: An error occurred.");
                     }
                 });
-            });
+            });*/
             app.UseCors();
             app.UseHttpsRedirection();
             app.UseAuthentication();

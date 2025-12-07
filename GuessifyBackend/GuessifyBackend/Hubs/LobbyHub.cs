@@ -17,8 +17,9 @@ namespace GuessifyBackend.Hubs
             _lobbyService = lobbyService;
             _gameService = gameService;
         }
-        public async Task<LobbyDto> CreateLobby(string lobbyName, int capacity, GameMode gameMode, int totalRoundCount)
+        public async Task<CreateLobbyDto> CreateLobby(string lobbyName, int capacity, GameMode gameMode, int totalRoundCount)
         {
+            //should be checked if another remote lobby exists with the name, or (host is a user and already plays or host somewhere else) - update thesis
             var isGuest = Context.User?.FindFirst(ClaimTypes.Anonymous)?.Value != null;
             string? userId = null;
             string? userName = null;
@@ -27,9 +28,9 @@ namespace GuessifyBackend.Hubs
                 userName = Context.User?.FindFirst(ClaimTypes.Name)?.Value;
                 userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             }
-            var lobby = await _lobbyService.CreateLobby(lobbyName, capacity, Context.ConnectionId, gameMode, totalRoundCount, userId, userName);
+            var lobbyCreateStatus = await _lobbyService.CreateLobby(lobbyName, capacity, Context.ConnectionId, gameMode, totalRoundCount, userId, userName);
 
-            return lobby;
+            return lobbyCreateStatus;
         }
 
         public List<LobbyDto> GetLobbies()
@@ -43,21 +44,32 @@ namespace GuessifyBackend.Hubs
             await _lobbyService.HandleLobbyLeaving(Context.ConnectionId);
         }
 
-        public async Task RefreshPlayersInLobby(string lobbyId)
+        public async Task AbandonLobby(string lobbyId, string gameId)
         {
-            var players = _lobbyService.GetPlayersInLobby(lobbyId);
-            await Clients.Group(lobbyId).ReceivePlayersInLobby(players);
+
+            await _lobbyService.AbandonLobby(lobbyId, gameId);
+
         }
 
-        public async Task StartGame(string lobbyId, string gameId)
+        public StartGameStatus CheckWhetherGameCanBeStarted(string lobbyId, string? hostPlayerName)
         {
-            var game = await _gameService.GetGame(gameId);
-            await Clients.Groups(lobbyId).RequestConnectionToGame(game);
-            _lobbyService.RemoveLobby(lobbyId);
-            await Clients.All.ReceiveLobbies(_lobbyService.GetLobbies());
+
+            var isGuest = Context.User?.FindFirst(ClaimTypes.Anonymous)?.Value != null;
+            string? name;
+            if (isGuest)
+            {
+                name = hostPlayerName;
+            }
+            else
+            {
+                var userName = Context.User?.FindFirst(ClaimTypes.Name)?.Value;
+                name = userName!;
+            }
+
+            return _lobbyService.CheckWhetherGameCanBeStarted(lobbyId, name);
         }
 
-        public async Task<JoinStatusDto> JoinLobbyAsGuestWithCode(string connectionCode, string? playerName)
+        public async Task<JoinStatusDto> JoinLobbyWithCode(string connectionCode, string? playerName)
         {
             var isGuest = Context.User?.FindFirst(ClaimTypes.Anonymous)?.Value != null;
             string name;

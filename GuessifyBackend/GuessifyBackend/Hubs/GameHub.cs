@@ -65,7 +65,7 @@ namespace GuessifyBackend.Hubs
                 {
                     Console.WriteLine("Error in StartNewRound: " + ex.Message);
                     Console.WriteLine(ex.InnerException);
-                    throw ex;
+                    throw;
                 }
 
 
@@ -101,7 +101,7 @@ namespace GuessifyBackend.Hubs
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error in ManageRemoteGame: " + ex.Message);
-                    throw ex;
+                    throw;
                 }
 
 

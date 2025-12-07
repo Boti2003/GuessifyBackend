@@ -32,12 +32,16 @@ namespace GuessifyBackend.Service.Implementations
 
         public async Task<CategoryDto> GetCategory(string categoryId)
         {
-            var category = await _dbContext.GameCategories.FirstOrDefaultAsync(c => c.Id == Guid.Parse(categoryId));
-            if (category == null)
-            {
-                throw new ArgumentException("Category does not found");
-            }
+            var category = await _dbContext.GameCategories.SingleAsync(c => c.Id == Guid.Parse(categoryId));
             return new CategoryDto(category.Id.ToString(), category.Name);
+
+        }
+
+        public async Task<GameCategory> GetCategoryEntity(string categoryId)
+        {
+            var category = await _dbContext.GameCategories.SingleAsync(c => c.Id == Guid.Parse(categoryId));
+
+            return category;
 
         }
 

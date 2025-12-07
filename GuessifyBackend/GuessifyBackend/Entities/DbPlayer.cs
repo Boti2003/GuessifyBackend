@@ -13,7 +13,6 @@ namespace GuessifyBackend.Entities
         public int Score { get; set; }
         public string ConnectionId { get; set; } = null!;
         public string? UserId { get; set; }
-
         public bool IsGuest { get; set; }
 
 
