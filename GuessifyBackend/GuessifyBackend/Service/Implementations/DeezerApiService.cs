@@ -12,8 +12,11 @@ namespace GuessifyBackend.Service.Implementations
 
         static JsonSerializerOptions serializerOptions = null!;
 
-        public DeezerApiService()
+        private readonly ILogger<DeezerApiService> _logger;
+
+        public DeezerApiService(ILogger<DeezerApiService> logger)
         {
+            _logger = logger;
             serializerOptions = new JsonSerializerOptions();
             serializerOptions.Converters.Add(new JsonNumberToStringConverter());
         }
@@ -36,7 +39,7 @@ namespace GuessifyBackend.Service.Implementations
                     {
                         if (code.GetInt32() == 4)
                         {
-                            Console.WriteLine("CODE " + code);
+                            _logger.LogError("Response code: " + code);
                             await Task.Delay(5000);
                             retryCount--;
                         }
@@ -50,7 +53,7 @@ namespace GuessifyBackend.Service.Implementations
                     success = true;
                 }
 
-                Console.WriteLine($"{albumsList?.MinimalAlbumsList.Count} albums found");
+                _logger.LogInformation($"{albumsList?.MinimalAlbumsList.Count} albums found for artist with id {artistId}");
             }
 
             return albumsList;
@@ -74,7 +77,7 @@ namespace GuessifyBackend.Service.Implementations
                     {
                         if (code.GetInt32() == 4)
                         {
-                            Console.WriteLine("CODE " + code);
+                            _logger.LogError("Response code: " + code);
                             await Task.Delay(5000);
                             retryCount--;
                         }

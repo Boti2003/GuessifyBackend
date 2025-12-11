@@ -15,11 +15,14 @@ namespace GuessifyBackend.Service.Implementations
 
         private IServiceProvider _serviceScopeFactory;
 
-        public LobbyService(IHubContext<LobbyHub, IlobbyClient> lobbyhub, IServiceProvider serviceFactory)
+        private ILogger<LobbyService> _logger;
+
+        public LobbyService(IHubContext<LobbyHub, IlobbyClient> lobbyhub, IServiceProvider serviceFactory, ILogger<LobbyService> logger)
         {
             _lobbyHubContext = lobbyhub;
             _lobbies = new List<Lobby>();
             _serviceScopeFactory = serviceFactory;
+            _logger = logger;
         }
 
         public async Task<CreateLobbyDto> CreateLobby(string name, int capacity, string connectionId, GameMode gameMode, int totalRoundCount, string? userId, string? userName)
@@ -50,7 +53,7 @@ namespace GuessifyBackend.Service.Implementations
                 do
                 {
                     connectionCode = "#" + new string(rand.GetItems(_chars, 6));
-                    Console.WriteLine(connectionCode);
+                    _logger.LogInformation("Generated connection code is: " + connectionCode);
                 } while (existingCodes.Contains(connectionCode));
 
 
@@ -72,7 +75,7 @@ namespace GuessifyBackend.Service.Implementations
                 HostUserName = userName
             };
             _lobbies.Add(lobby);
-            Console.WriteLine(lobby.Id);
+            _logger.LogInformation("Lobbyí created with id: " + lobby.Id);
             var lobbies = GetLobbies();
             await _lobbyHubContext.Groups.AddToGroupAsync(connectionId, lobby.Id);
             await _lobbyHubContext.Clients.All.ReceiveLobbies(lobbies);
@@ -140,7 +143,7 @@ namespace GuessifyBackend.Service.Implementations
                     return new JoinStatusDto(null, JoinStatus.USER_HOST_GAME, null);
                 }
             }
-            Console.WriteLine(lobby);
+
             var newPlayer = new Player
             {
                 Id = Guid.NewGuid().ToString(),
@@ -181,7 +184,7 @@ namespace GuessifyBackend.Service.Implementations
             List<LobbyDto> lobbyDtos = new List<LobbyDto>();
             foreach (var lobby in _lobbies)
             {
-                Console.WriteLine(lobby.Name);
+
 
                 lobbyDtos.Add(new LobbyDto(
                     lobby.Id,
@@ -202,7 +205,7 @@ namespace GuessifyBackend.Service.Implementations
 
         public async Task HandleLobbyLeaving(string connectionId)
         {
-            Console.WriteLine("Client disconnected: " + connectionId);
+            _logger.LogInformation("Client disconnected: " + connectionId);
             var lobby = _lobbies.Find(lobby => lobby.HostConnectionId == connectionId);
             if (lobby != null)
             {

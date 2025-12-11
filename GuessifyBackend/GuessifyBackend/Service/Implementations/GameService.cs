@@ -27,13 +27,15 @@ namespace GuessifyBackend.Service.Implementations
 
         private readonly IConfiguration _configuration;
 
+        private readonly ILogger<GameService> _logger;
+
         private IHubContext<GameHub, IGameClient> _gameHubContext
         {
             get;
         }
 
 
-        public GameService(IConfiguration configuration, GameDbContext dbContext, ICategoryService categoryService, IQuestionService questionService, IDeezerApiService deezerApiService, IHubContext<GameHub, IGameClient> hubContext, IGameEventManager gameEventManager, IVotingService votingService, IUserService userService)
+        public GameService(IConfiguration configuration, GameDbContext dbContext, ICategoryService categoryService, IQuestionService questionService, IDeezerApiService deezerApiService, IHubContext<GameHub, IGameClient> hubContext, IGameEventManager gameEventManager, IVotingService votingService, IUserService userService, ILogger<GameService> logger)
         {
             _categoryService = categoryService;
             _dbContext = dbContext;
@@ -44,6 +46,7 @@ namespace GuessifyBackend.Service.Implementations
             _votingService = votingService;
             _userService = userService;
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task<GameDto> StartNewGame(string name, DateTime startTime, GameMode gameMode, int totalRoundCount, string? hostConnectionId = null)
@@ -122,85 +125,102 @@ namespace GuessifyBackend.Service.Implementations
 
         public async Task<GameStatus> StartNewRound(string gameId, string categoryId)
         {
-            var games = await _dbContext.Games.Include(g => g.GameRounds).ToListAsync();
-            var game = games.FirstOrDefault(g => g.Id == Guid.Parse(gameId));
-            if (game == null)
+            try
             {
-                throw new ArgumentException("Game does not exists");
-            }
+                var games = await _dbContext.Games.Include(g => g.GameRounds).ToListAsync();
+                var game = games.FirstOrDefault(g => g.Id == Guid.Parse(gameId));
+                if (game == null)
+                {
+                    throw new ArgumentException("Game does not exists");
+                }
 
-            var category = await _categoryService.GetCategory(categoryId);
-            var questions = await _questionService.CreateQuestions(categoryId, 5);
-            var newRound = new GameRound
-            {
-                StartTime = DateTime.Now,
-                GameCategoryId = new Guid(categoryId),
-                Questions = questions,
-                Answers = new List<PlayerAnswer>(),
+                var category = await _categoryService.GetCategory(categoryId);
+                var questions = await _questionService.CreateQuestions(categoryId, 5);
+                var newRound = new GameRound
+                {
+                    StartTime = DateTime.Now,
+                    GameCategoryId = new Guid(categoryId),
+                    Questions = questions,
+                    Answers = new List<PlayerAnswer>(),
 
-            };
-            game.GameRounds.Add(newRound);
-            await _dbContext.SaveChangesAsync();
+                };
+                game.GameRounds.Add(newRound);
+                await _dbContext.SaveChangesAsync();
 
 
-            var status = await PlayGameRound(gameId, new GameRoundDto(newRound.Id.ToString(), newRound.GameCategoryId.ToString(), category.Name));
-            if (status == GameStatus.ABORTED)
-            {
-                await EndGame(gameId, status);
+                var status = await PlayGameRound(gameId, new GameRoundDto(newRound.Id.ToString(), newRound.GameCategoryId.ToString(), category.Name));
+                if (status == GameStatus.ABORTED)
+                {
+                    await EndGame(gameId, status);
+                    return status;
+                }
+                if (game.GameRounds.Count >= game.TotalRoundCount)
+                {
+
+                    await _gameHubContext.Clients.Group(gameId).ReceiveGameEnd(new GameEndDto(GameEndReason.ALL_ROUNDS_COMPLETED));
+                    await EndGame(gameId, status);
+                    return GameStatus.FINISHED;
+                }
+
+                int roundCount = game.GameRounds.Count;
+
+                await _gameHubContext.Clients.Group(gameId).ReceiveEndGameRound(roundCount + 1);
                 return status;
             }
-            if (game.GameRounds.Count >= game.TotalRoundCount)
+            catch (Exception ex)
             {
-                Console.WriteLine(game.GameRounds.Count);
-                await _gameHubContext.Clients.Group(gameId).ReceiveGameEnd(new GameEndDto(GameEndReason.ALL_ROUNDS_COMPLETED));
-                await EndGame(gameId, status);
-                return GameStatus.FINISHED;
+                _logger.LogError("Error in StartNewRound: " + ex.Message);
+                _logger.LogError(ex.InnerException?.Message);
+                await _gameHubContext.Clients.Group(gameId).ExceptionThrown(ex.Message);
+                return GameStatus.ABORTED;
             }
-
-            int roundCount = game.GameRounds.Count;
-
-            await _gameHubContext.Clients.Group(gameId).ReceiveEndGameRound(roundCount + 1);
-            return status;
 
         }
 
         public async Task ManageRemoteGamePlay(string gameId)
         {
-
-
-            GameStatus gameStatus = GameStatus.IN_GAME;
-            while (gameStatus == GameStatus.IN_GAME)
+            try
             {
-                await Task.Delay(1000);
-
-                int voteTime = _configuration.GetValue<int>("GameConstants:VotingTimeInMilisec");
-                await _gameHubContext.Clients.Group(gameId).ReceiveVotingStarted(new VotingTime(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), voteTime));
-
-                var tcs = new TaskCompletionSource<object>();
-
-                EventHandler handler = (sender, args) =>
+                GameStatus gameStatus = GameStatus.IN_GAME;
+                while (gameStatus == GameStatus.IN_GAME)
                 {
-                    tcs.TrySetResult(args);
+                    await Task.Delay(1000);
 
-                };
-                _eventManager.SubscribeToEvent(gameId, handler, EventType.EVERYONE_VOTED);
+                    int voteTime = _configuration.GetValue<int>("GameConstants:VotingTimeInMilisec");
+                    await _gameHubContext.Clients.Group(gameId).ReceiveVotingStarted(new VotingTime(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), voteTime));
+
+                    var tcs = new TaskCompletionSource<object>();
+
+                    EventHandler handler = (sender, args) =>
+                    {
+                        tcs.TrySetResult(args);
+
+                    };
+                    _eventManager.SubscribeToEvent(gameId, handler, EventType.EVERYONE_VOTED);
 
 
-                await Task.WhenAny(tcs.Task, Task.Delay(voteTime));
+                    await Task.WhenAny(tcs.Task, Task.Delay(voteTime));
 
-                _eventManager.UnsubscribeFromEvent(gameId, handler, EventType.EVERYONE_VOTED);
+                    _eventManager.UnsubscribeFromEvent(gameId, handler, EventType.EVERYONE_VOTED);
 
-                var categoryId = _votingService.GetWinningCategory(gameId);
-                if (categoryId == null)
-                {
-                    categoryId = await _categoryService.GetRandomCategoryId();
+                    var categoryId = _votingService.GetWinningCategory(gameId);
+                    if (categoryId == null)
+                    {
+                        categoryId = await _categoryService.GetRandomCategoryId();
+                    }
+                    var category = await _categoryService.GetCategory(categoryId);
+                    await _gameHubContext.Clients.Group(gameId).ReceiveVotingEnded(category);
+                    _votingService.ResetVotesForGame(gameId);
+                    var waitingTime = _configuration.GetValue<int>("GameConstants:WaitingTimeInMilisec");
+                    await Task.Delay(waitingTime);
+                    gameStatus = await StartNewRound(gameId, categoryId);
                 }
-                var category = await _categoryService.GetCategory(categoryId);
-                await _gameHubContext.Clients.Group(gameId).ReceiveVotingEnded(category);
-                _votingService.ResetVotesForGame(gameId);
-                var waitingTime = _configuration.GetValue<int>("GameConstants:WaitingTimeInMilisec");
-                await Task.Delay(waitingTime);
-                gameStatus = await StartNewRound(gameId, categoryId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error in ManageRemoteGamePlay: " + ex.Message);
+                _logger.LogError(ex.InnerException?.Message);
+                await _gameHubContext.Clients.Group(gameId).ExceptionThrown(ex.Message);
             }
 
 
@@ -262,10 +282,10 @@ namespace GuessifyBackend.Service.Implementations
             await _dbContext.SaveChangesAsync();
 
             var playerCount = await GetPlayerCountInGame(gameId);
-            Console.WriteLine("Players: " + gameRound.Answers.Count + " " + playerCount);
+
             if (gameRound.Answers.Count(gra => gra.QuestionId == question.Id) >= playerCount)
             {
-                Console.WriteLine("All players answered: " + gameRound.Answers.Count + playerCount);
+                _logger.LogInformation("All players answered to the question. Answer count: " + gameRound.Answers.Count + ". Player count: " + playerCount);
                 _eventManager.RaiseEventOfGame(gameId, EventType.EVERYONE_ANSWERED);
             }
         }
@@ -290,7 +310,7 @@ namespace GuessifyBackend.Service.Implementations
 
                 if (game.Status != GameStatus.IN_GAME)
                 {
-                    Console.WriteLine("GAME STOPPED");
+                    _logger.LogInformation("GAME STOPPED");
                     return game.Status;
                 }
                 await _questionService.SetSendDateForQuestion(question.Id, DateTime.Now);

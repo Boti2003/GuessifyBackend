@@ -53,20 +53,13 @@ namespace GuessifyBackend.Hubs
         {
             Task.Run(async () =>
             {
-                try
+
+                using (var scope = _serviceFactory.CreateScope())
                 {
-                    using (var scope = _serviceFactory.CreateScope())
-                    {
-                        var _scopedGameService = scope.ServiceProvider.GetRequiredService<IGameService>();
-                        await _scopedGameService.StartNewRound(gameId, categoryId);
-                    }
+                    var _scopedGameService = scope.ServiceProvider.GetRequiredService<IGameService>();
+                    await _scopedGameService.StartNewRound(gameId, categoryId);
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error in StartNewRound: " + ex.Message);
-                    Console.WriteLine(ex.InnerException);
-                    throw;
-                }
+
 
 
             });
@@ -87,51 +80,27 @@ namespace GuessifyBackend.Hubs
 
         public Task ManageRemoteGame(string gameId)
         {
+
             Task.Run(async () =>
             {
-                try
-                {
 
-                    using (var scope = _serviceFactory.CreateScope())
-                    {
-                        var _scopedGameService = scope.ServiceProvider.GetRequiredService<IGameService>();
-                        await _scopedGameService.ManageRemoteGamePlay(gameId);
-                    }
-                }
-                catch (Exception ex)
+
+                using (var scope = _serviceFactory.CreateScope())
                 {
-                    Console.WriteLine("Error in ManageRemoteGame: " + ex.Message);
-                    throw;
+                    var _scopedGameService = scope.ServiceProvider.GetRequiredService<IGameService>();
+                    await _scopedGameService.ManageRemoteGamePlay(gameId);
                 }
+
 
 
             });
             return Task.CompletedTask;
         }
 
-        public override Task OnDisconnectedAsync(Exception? exception)
+        public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            var connectionId = Context.ConnectionId;
-            Task.Run(async () =>
-            {
-                try
-                {
+            await _gameService.ManageLeaveGame(Context.ConnectionId);
 
-                    using (var scope = _serviceFactory.CreateScope())
-                    {
-                        var _scopedGameService = scope.ServiceProvider.GetRequiredService<IGameService>();
-                        await _scopedGameService.ManageLeaveGame(connectionId);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error in Leavegame: " + ex.Message);
-                    throw;
-                }
-
-
-            });
-            return base.OnDisconnectedAsync(exception);
 
         }
 

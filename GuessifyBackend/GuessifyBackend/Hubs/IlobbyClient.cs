@@ -14,5 +14,7 @@ namespace GuessifyBackend.Hubs
 
         public Task ReceiveHostDisconnectedFromLobby();
 
+        public Task ExceptionThrown(string message);
+
     }
 }

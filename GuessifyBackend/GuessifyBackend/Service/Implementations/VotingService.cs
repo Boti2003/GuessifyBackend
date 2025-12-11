@@ -10,11 +10,13 @@ namespace GuessifyBackend.Service.Implementations
 
         private List<VoteSummary> _voteSummaries;
         private readonly IGameEventManager _gameEventManager;
+        private readonly ILogger<VotingService> _logger;
 
-        public VotingService(IGameEventManager gameEventManager)
+        public VotingService(IGameEventManager gameEventManager, ILogger<VotingService> logger)
         {
             _voteSummaries = new List<VoteSummary>();
             _gameEventManager = gameEventManager;
+            _logger = logger;
         }
 
         public void AddVoteSummaryForGame(string gameId)
@@ -42,11 +44,11 @@ namespace GuessifyBackend.Service.Implementations
                 if (sumVotes >= playerCount)
                 {
                     _gameEventManager.RaiseEventOfGame(gameId, EventType.EVERYONE_VOTED);
-                    Console.WriteLine($"All votes registered for game {gameId}. Winning category: {GetWinningCategory(gameId)}");
+                    _logger.LogInformation($"All votes registered for game {gameId}. Winning category: {GetWinningCategory(gameId)}");
                 }
                 foreach (var key in voteSummary.VoteCounts.Keys)
                 {
-                    Console.WriteLine($"Category: {key}, Votes: {voteSummary.VoteCounts[key]}");
+                    _logger.LogInformation($"Category: {key}, Votes: {voteSummary.VoteCounts[key]}");
 
                 }
             }

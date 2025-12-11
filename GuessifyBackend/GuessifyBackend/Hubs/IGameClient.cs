@@ -20,6 +20,8 @@ namespace GuessifyBackend.Hubs
 
         public Task ReceiveVotingEnded(CategoryDto categoryDto);
 
+        public Task ExceptionThrown(string message);
+
 
     }
 }

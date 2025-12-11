@@ -7,6 +7,7 @@ using GuessifyBackend.Jobs;
 using GuessifyBackend.Service.Implementations;
 using GuessifyBackend.Service.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Quartz;
@@ -58,7 +59,7 @@ namespace GuessifyBackend
             builder.Services.AddSerilog();
             builder.Services.AddQuartz(q =>
             {
-                // Just use the name of your job that you created in the Jobs folder.
+
                 var jobKey = new JobKey("SetupMusicDb");
                 q.AddJob<MusicDbSetupJob>(opts => opts.WithIdentity(jobKey));
 
@@ -69,7 +70,7 @@ namespace GuessifyBackend
                 );
             });
             builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
-            //builder.Services.AddControllers();
+
             builder.Services.AddControllers()
                     .AddJsonOptions(options =>
                     {
@@ -92,18 +93,14 @@ namespace GuessifyBackend
 
             builder.Services.AddAuthentication(options =>
             {
-                // Identity made Cookie authentication the default.
-                // However, we want JWT Bearer Auth to be the default.
+
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                /*options.DefaultAuthenticateScheme = BearerTokenDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = BearerTokenDefaults.AuthenticationScheme;*/
+
             }).
             AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
-                // Configure the Authority to the expected value for
-                // the authentication provider. This ensures the token
-                // is appropriately validated.
+
 
 
                 options.RequireHttpsMetadata = false;
@@ -117,29 +114,19 @@ namespace GuessifyBackend
                     Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!))
                 };
 
-                // We have to hook the OnMessageReceived event in order to
-                // allow the JWT authentication handler to read the access
-                // token from the query string when a WebSocket or 
-                // Server-Sent Events request comes in.
 
-                // Sending the access token in the query string is required when using WebSockets or ServerSentEvents
-                // due to a limitation in Browser APIs. We restrict it to only calls to the
-                // SignalR hub in this code.
-                // See https://docs.microsoft.com/aspnet/core/signalr/security#access-token-logging
-                // for more information about security considerations when using
-                // the query string to transmit the access token.
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
                     {
                         var accessToken = context.Request.Query["access_token"];
 
-                        // If the request is for our hub...
+
                         var path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
                             (path.StartsWithSegments("/lobbyHub") || path.StartsWithSegments("/gameHub")))
                         {
-                            // Read the token out of the query string
+
                             context.Token = accessToken;
                         }
                         return Task.CompletedTask;
@@ -164,7 +151,14 @@ namespace GuessifyBackend
                     });
             });
 
-            builder.Services.AddSignalR().AddJsonProtocol(options =>
+            builder.Services.AddSignalR().
+            AddHubOptions<LobbyHub>(options =>
+                options.AddFilter<ErrorHandlingLobbyHubFilter>()
+            ).
+            AddHubOptions<GameHub>(options =>
+                options.AddFilter<ErrorHandlingGameHubFilter>()
+            ).
+            AddJsonProtocol(options =>
             {
                 options.PayloadSerializerOptions.Converters
                    .Add(new JsonStringEnumConverter());
