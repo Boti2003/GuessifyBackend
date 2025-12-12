@@ -75,21 +75,34 @@
         {
           "name": "Classic Rock",
           "artists": [
-
+            {
+              "name": "Omega",
+              "deezerId": "82058802"
+            },
+            {
+              "name": "Piramis",
+              "deezerId": "4082"
+            },
+            {
+              "name": "Locomotiv GT (LGT)",
+              "deezerId": "2330861"
+            },
+            {
+              "name": "P. Mobil",
+              "deezerId": "6446998"
+            },
+            {
+              "name": "Karthago",
+              "deezerId": "132770"
+            },
+            {
+              "name": "Tankcsapda",
+              "deezerId": "86"
+            }
           ],
           "albums": [
 
           ],
-          "excluded_albums": [
-
-          ]
-        },
-        {
-          "name": "Hard Rock",
-          "artists": [
-
-          ],
-          "albums": [],
           "excluded_albums": [
 
           ]
@@ -102,7 +115,22 @@
         {
           "name": "New wave hiphop",
           "artists": [
-
+            {
+              "name": "Beton Hofi",
+              "deezerId": "80234972"
+            },
+            {
+              "name": "cserihanna",
+              "deezerId": "186149107"
+            },
+            {
+              "name": "bongor",
+              "deezerId": "89543462"
+            },
+            {
+              "name": "Krúbi",
+              "deezerId": "13879063"
+            }
           ],
           "albums": [
 
@@ -114,7 +142,22 @@
         {
           "name": "Classic rap",
           "artists": [
-
+            {
+              "name": "Sub Bass Monster",
+              "deezerId": "67548"
+            },
+            {
+              "name": "Akkezdet Phiai",
+              "deezerId": "158344712"
+            },
+            {
+              "name": "Ganxsta Zolee",
+              "deezerId": "8129"
+            },
+            {
+              "name": "Funktasztikus",
+              "deezerId": "1620787"
+            }
           ],
           "albums": [],
           "excluded_albums": [
@@ -200,7 +243,7 @@
           ]
         },
         {
-          "name": "Rock",
+          "name": "70s Rock",
           "artists": [
             {
               "name": "Omega",
@@ -257,7 +300,7 @@
       "endYear": 1989,
       "categories": [
         {
-          "name": "Rock",
+          "name": "80s Rock",
           "artists": [
             {
               "name": "P. Mobil",
@@ -280,7 +323,7 @@
           "excluded_albums": []
         },
         {
-          "name": "Pop",
+          "name": "80s Pop",
           "artists": [
             {
               "name": "Neoton Família",
@@ -309,7 +352,7 @@
           ]
         },
         {
-          "name": "Pop-rock",
+          "name": "80s Pop-rock",
           "artists": [
             {
               "name": "KFT",
@@ -322,13 +365,17 @@
             {
               "name": "Locomotiv GT (LGT)",
               "deezerId": "2330861"
+            },
+            {
+              "name": "Edda Művek",
+              "deezerId": "65472"
             }
           ],
           "albums": [],
           "excluded_albums": []
         },
         {
-          "name": "Alternative rock",
+          "name": "80s Alternative rock",
           "artists": [
             {
               "name": "Kontroll Csoport",

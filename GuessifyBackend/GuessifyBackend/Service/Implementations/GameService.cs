@@ -127,8 +127,7 @@ namespace GuessifyBackend.Service.Implementations
         {
             try
             {
-                var games = await _dbContext.Games.Include(g => g.GameRounds).ToListAsync();
-                var game = games.FirstOrDefault(g => g.Id == Guid.Parse(gameId));
+                var game = await _dbContext.Games.Include(g => g.GameRounds).FirstOrDefaultAsync(g => g.Id == Guid.Parse(gameId));
                 if (game == null)
                 {
                     throw new ArgumentException("Game does not exists");

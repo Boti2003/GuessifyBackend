@@ -65,8 +65,14 @@ namespace GuessifyBackend
 
                 q.AddTrigger(opts => opts
                     .ForJob(jobKey)
+                    .WithIdentity("SetupMusicDb-startup-trigger")
+                    .StartNow()
+                );
+
+                q.AddTrigger(opts => opts
+                    .ForJob(jobKey)
                     .WithIdentity("SetupMusicDb-trigger")
-                    .WithSchedule(CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Saturday, 22, 2))
+                    .WithSchedule(CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Monday, 3, 0))
                 );
             });
             builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
