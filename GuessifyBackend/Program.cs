@@ -150,7 +150,9 @@ namespace GuessifyBackend
                 options.AddDefaultPolicy(
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5173")
+                        policy.WithOrigins("https://guessify.hu",
+                            "https://guessify-frontend-blue.vercel.app",
+                            "http://localhost:5173")
                               .AllowAnyHeader()
                               .AllowAnyMethod()
                               .AllowCredentials();
