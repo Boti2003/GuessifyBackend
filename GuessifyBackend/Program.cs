@@ -172,6 +172,24 @@ namespace GuessifyBackend
 
             var app = builder.Build();
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+
+                    var applicationDbContext = services.GetRequiredService<ApplicationDbContext>();
+                    var gameDbContext = services.GetRequiredService<GameDbContext>();
+                    gameDbContext.Database.Migrate();
+                    applicationDbContext.Database.Migrate();
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "Error during database migration.");
+                }
+            }
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
