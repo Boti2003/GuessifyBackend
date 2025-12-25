@@ -21,17 +21,64 @@
             {
               "name": "Blahalouisiana",
               "deezerId": "5367043"
+            },
+            {
+              "name": "Ricsárdgír",
+              "deezerId": "13352077"
+            },
+            {
+              "name": "Analog Balaton",
+              "deezerId": "55446702"
             }
           ],
-          "albums": [
-            {
-              "name": "Kill the Koala",
-              "artistName": "Ricsárdgír",
-              "deezerId": "521268842"
-            }
+          "albums": [           
           ],
           "excluded_albums": [
 
+          ]
+        },
+        {
+          "name": "Folk-Alternative",
+          "artists": [
+            {
+              "name": "Bohemian Betyars",
+              "deezerId": "1467225"
+            },
+            {
+              "name": "Bagossy Brothers Company",
+              "deezerId": "5552522"
+            },
+            {
+              "name": "Parno Graszt",
+              "deezerId": "288512"
+            },
+            {
+              "name": "aurevoir.",
+              "deezerId": "12227468"
+            },
+            {
+              "name": "Góbé",
+              "deezerId": "7142973"
+            },
+            {
+              "name": "4s Street",
+              "deezerId": "64484322"
+            }
+          ],
+          "albums": [
+            
+          ],
+          "excluded_albums": [
+            {
+              "name": "i will die in florida",
+              "artistName": "Góbé",
+              "deezerId": "637871641"
+            },
+            {
+              "name": "End To A Beginning",
+              "artistName": "Góbé",
+              "deezerId": "253435582"
+            }
           ]
         },
         {
@@ -56,6 +103,10 @@
             {
               "name": "Quimby",
               "deezerId": "2177"
+            },
+            {
+              "name": "HIPERKARMA",
+              "deezerId": "2178"
             }
           ],
           "albums": [],
@@ -64,6 +115,11 @@
               "name": "Hummel, Schubert, Kodály / フンメル • シューベルト • コダーイ",
               "artistName": "Cseh Tamás",
               "deezerId": "554914702"
+            },
+            {
+              "name": "Telemann, Chr. Bach/Casadesus, Hummel",
+              "artistName": "Cseh Tamás",
+              "deezerId": "554970952"
             }
           ]
         }
@@ -113,7 +169,7 @@
       "name": "Hiphop",
       "categories": [
         {
-          "name": "New wave hiphop",
+          "name": "New wave alternative hiphop",
           "artists": [
             {
               "name": "Beton Hofi",
@@ -157,6 +213,10 @@
             {
               "name": "Funktasztikus",
               "deezerId": "1620787"
+            },
+            {
+              "name": "Bëlga",
+              "deezerId": "101"
             }
           ],
           "albums": [],
@@ -172,7 +232,7 @@
     {
       "name": "70s",
       "startYear": 1970,
-      "endYear": 1969,
+      "endYear": 1979,
       "categories": [
         {
           "name": "70s Pop and Dance",
